@@ -1,6 +1,12 @@
 apply plugin: 'eclipse'
 apply plugin: 'groovy'
 
+ext {
+    virgoVersion = "3.6.3.RELEASE"
+    springVersion = "3.2.11.RELEASE"
+    aspectjVersion = "1.7.1"
+}
+
 configurations {
     virgo
 }
@@ -13,7 +19,11 @@ repositories {
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.6'
-    virgo 'org.eclipse.virgo:virgo-tomcat-server:3.6.3.RELEASE'
+    virgo "org.eclipse.virgo:virgo-tomcat-server:${virgoVersion}"
+}
+
+task setupVirgo << {
+    unpackVirgo
 }
 
 task unpackVirgo << {
@@ -21,9 +31,9 @@ task unpackVirgo << {
     configurations.virgo.resolvedConfiguration.resolvedArtifacts.each{ 
         artifact -> 
            project.copy { 
-               into new File( "${buildDir}/staging/" + artifact.name ) 
+               into new File( "${buildDir}/staging" ) 
                from( zipTree(artifact.file) ) 
-           } 
+           }
     }
 }
 
@@ -31,10 +41,28 @@ task runVirgo << {
     
 }
 
-task greeting(type: UpdatePropertiesTask) {
-    greeting = 'howdy!'
+task updateKernelRegionSshSettings(type: UpdatePropertiesTask) {
+    source = "${projectDir}/src/main/config/kernel.osgi.console.properties"
+    target = "${buildDir}/staging/virgo-tomcat-server-${virgoVersion}/configuration/osgi.console.properties"
 }
 
+task updateUserRegionSshSettings(type: UpdatePropertiesTask) {
+    source = "${projectDir}/src/main/config/user.osgi.console.properties"
+    target = "${buildDir}/staging/virgo-tomcat-server-${virgoVersion}/repository/ext/osgi.console.properties"
+}
+
+task updateFrameworkProperties(type: UpdatePropertiesTask) {
+    source = "${projectDir}/src/main/config/config.ini"
+    target = "${buildDir}/staging/virgo-tomcat-server-${virgoVersion}/configuration/config.ini"
+}
+
+task upgradeSpringAndAspectJ(type: UpdateSpringAndAspectJTask) {
+    virgoHomeFolderPath = "${buildDir}/staging/virgo-tomcat-server-${virgoVersion}"
+    springUpgradeFolderPath = "${buildDir}/staging/spring-upgrade"
+    aspectjUpgradeFolderPath = "${buildDir}/staging/aspectj-upgrade"
+    springUpgradeConfFolderPath = "${projectDir}/src/main/upgrade/spring"
+    aspectjVersion = "${aspectjVersion}"
+}
 
 buildscript {
     repositories {
@@ -57,12 +85,51 @@ import org.apache.commons.lang.Validate;
 import java.util.Iterator;
 
 class UpdatePropertiesTask extends DefaultTask {
-    String greeting = 'hello from GreetingTask'
+    String target;
+    String source;
 
     @TaskAction
-    def greet() {
-        println greeting
+    def update() {
+        Validate.notNull( target, "Must specify the property: target" );
+        Validate.notNull( source, "Must specify the property: source" );
+        PropertiesConfiguration src = new PropertiesConfiguration( source );
+        PropertiesConfiguration trgt = new PropertiesConfiguration( target );
+        Iterator keyIterator = src.getKeys();
+		while( keyIterator.hasNext() ) {
+		    String key = keyIterator.next();
+		    Object value = src.getProperty( key );
+		    trgt.setProperty( key, value ); 
+		}
+		trgt.save();
     }
-    
 }
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.Validate;
+import org.apache.commons.io.FileUtils;
+import java.util.Iterator;
+import java.io.File;
+import java.util.regex.Pattern;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+import java.nio.file.Files;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+class UpdateSpringAndAspectJTask extends DefaultTask {
+    String virgoHomeFolderPath;
+	String springUpgradeFolderPath;
+	String aspectjUpgradeFolderPath;
+	String springUpgradeConfFolderPath;
+	String aspectjVersion;
+    
+    @TaskAction
+    def update() {
+        Validate.notNull( virgoHomeFolderPath, "Must specify the property: virgoHomeFolderPath" );
+		Validate.notNull( springUpgradeFolderPath, "Must specify the property: springUpgradeFolderPath" );
+		Validate.notNull( aspectjUpgradeFolderPath, "Must specify the property: aspectjUpgradeFolderPath" );
+		Validate.notNull( springUpgradeConfFolderPath, "Must specify the property: springUpgradeConfFolderPath" );
+		
+    }
+}
