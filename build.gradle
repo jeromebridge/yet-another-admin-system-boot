@@ -1,0 +1,68 @@
+apply plugin: 'eclipse'
+apply plugin: 'groovy'
+
+configurations {
+    virgo
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "http://repo.pennassurancesoftware.com/repository/public/" }
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.3.6'
+    virgo 'org.eclipse.virgo:virgo-tomcat-server:3.6.3.RELEASE'
+}
+
+task unpackVirgo << {
+    delete new File( "${buildDir}/staging" )
+    configurations.virgo.resolvedConfiguration.resolvedArtifacts.each{ 
+        artifact -> 
+           project.copy { 
+               into new File( "${buildDir}/staging/" + artifact.name ) 
+               from( zipTree(artifact.file) ) 
+           } 
+    }
+}
+
+task runVirgo << {
+    
+}
+
+task greeting(type: UpdatePropertiesTask) {
+    greeting = 'howdy!'
+}
+
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+        
+    dependencies {
+        classpath 'commons-configuration:commons-configuration:1.10'
+        classpath 'commons-lang:commons-lang:2.6'
+        classpath 'commons-io:commons-io:2.4'
+    }
+}
+
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.TaskAction
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.Validate;
+import java.util.Iterator;
+
+class UpdatePropertiesTask extends DefaultTask {
+    String greeting = 'hello from GreetingTask'
+
+    @TaskAction
+    def greet() {
+        println greeting
+    }
+    
+}
+
