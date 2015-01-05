@@ -1,18 +1,35 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
 apply plugin: 'eclipse'
-apply plugin: 'groovy'
+apply plugin: 'java'
 
 ext {
     virgoVersion = "3.6.3.RELEASE"
     springVersion = "3.2.11.RELEASE"
     aspectjVersion = "1.7.1"
+    ops4jVersion = "1.5.0"
+    paxUrlVersion = "2.2.0"
+    paxSwissboxVersion = "1.8.0"
+    
+    jpaVersion = "2.1.0"
+    eclipselinkVersion = "2.5.2"
+    cdiVersion = "1.2"
+    commonsIoVersion = "2.4"
+    commonsLang3Version = "3.1"
+    xmlbeansVersion = "2.4.0"
+    junitVersion = "4.11.0"
+    postgresqlJdbc4Version = "8.3.604"
+    jaxbVersion = "2.2.10"
+    liquibaseVersion = "3.2.0"
+    restletVersion = "2.2.3"
+
 }
 
 configurations {
     virgo
     spring
     aspectj
+    pax
 }
 
 repositories {
@@ -22,7 +39,52 @@ repositories {
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.3.6'
+    compile "javax.persistence:com.springsource.javax.persistence:2.0.0"
+    compile "org.apache.velocity:com.springsource.org.apache.velocity.tools.view:1.4.0"
+    compile "org.dom4j:com.springsource.org.dom4j:1.6.1"
+    compile "org.glassfish:javax.faces:2.1.2"
+    compile "javax.inject:javax.inject:1"
+    compile "javax.interceptor:javax.interceptor-api:1.2"
+    compile "javax.transaction:javax.transaction-api:1.2"
+    compile "javax.ws.rs:jsr311-api:1.1.1"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.cglib:3.1_1"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-beanutils:1.8.3_2"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-collections:3.2.1_3"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-dbcp:1.4_3"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-digester:1.8_4"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-jxpath:1.3_1"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-lang:2.4_6"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-pool:1.5.4_4"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.guava:11.0.2_2"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.jaxb-impl:2.2.10_1"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.oro:2.0.8_6"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.reflections:0.9.8_1"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.velocity:1.7_3"
+    compile "org.eclipse.persistence:javax.persistence:${jpaVersion}"
+    compile "org.eclipse.persistence:org.eclipse.persistence.core:${eclipselinkVersion}"
+    compile "org.eclipse.persistence:org.eclipse.persistence.jpa:${eclipselinkVersion}"
+    compile "org.eclipse.persistence:org.eclipse.persistence.jpa.jpql:${eclipselinkVersion}"
+    compile "org.eclipse.persistence:org.eclipse.persistence.asm:${eclipselinkVersion}"
+    compile "org.eclipse.persistence:org.eclipse.persistence.antlr:${eclipselinkVersion}"
+    compile "org.eclipse.persistence:org.eclipse.persistence.moxy:${eclipselinkVersion}"
+    compile "org.eclipse.virgo.mirrored:org.glassfish.com.sun.faces:2.1.18.v201304210537-virgo"
+    compile "org.restlet.osgi:org.restlet:${restletVersion}"
+    compile "org.restlet.osgi:org.restlet.ext.servlet:${restletVersion}"
+    compile "org.restlet.osgi:org.restlet.ext.xml:${restletVersion}"
+    compile "org.restlet.osgi:org.restlet.ext.jaxrs:${restletVersion}"
+    compile "org.restlet.osgi:org.restlet.ext.osgi:${restletVersion}"
+    compile "org.restlet.osgi:org.restlet.ext.jaxb:${restletVersion}"
+    compile "org.testng:testng:6.5.2"
+    compile "com.atomikos:transactions-osgi:3.9.3"
+    compile "javax.enterprise:cdi-api:${cdiVersion}"
+    compile "commons-io:commons-io:${commonsIoVersion}"
+    compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    compile "org.apache.xmlbeans:com.springsource.org.apache.xmlbeans:${xmlbeansVersion}"
+    compile "org.junit:com.springsource.org.junit:${junitVersion}"
+    compile "org.postgresql:com.springsource.org.postgresql.jdbc4:${postgresqlJdbc4Version}"
+    compile "javax.xml.bind:jaxb-api:${jaxbVersion}"
+    compile "org.liquibase:liquibase-osgi:${liquibaseVersion}"
+    
     virgo "org.eclipse.virgo:virgo-tomcat-server:${virgoVersion}"
     
     spring "org.apache.servicemix.bundles:org.apache.servicemix.bundles.spring-aop:${springVersion}_3"
@@ -41,11 +103,28 @@ dependencies {
     spring "org.apache.servicemix.bundles:org.apache.servicemix.bundles.spring-webmvc:${springVersion}_2"
     spring "org.apache.servicemix.bundles:org.apache.servicemix.bundles.spring-webmvc-portlet:${springVersion}_2"
     
+    pax "org.ops4j.base:ops4j-base-lang:${ops4jVersion}"
+    pax "org.ops4j.base:ops4j-base-monitors:$ops4jVersion}"
+    pax "org.ops4j.base:ops4j-base-io:${ops4jVersion}"
+    pax "org.codehaus.jackson:jackson-core-asl:1.9.13"
+    pax "org.ops4j.pax.swissbox:pax-swissbox-core:${paxSwissboxVersion}"
+    pax "org.ops4j.base:ops4j-base-util-property:${ops4jVersion}"
+    pax "org.ops4j.pax.swissbox:pax-swissbox-property:${paxSwissboxVersion}"
+    pax "org.ops4j.pax.swissbox:pax-swissbox-lifecycle:${paxSwissboxVersion}"
+    pax "org.ops4j.pax.swissbox:pax-swissbox-tracker:${paxSwissboxVersion}"
+    pax "org.ops4j.pax.url:pax-url-commons:${paxUrlVersion}"
+    pax "org.ops4j.pax.url:pax-url-assembly:${paxUrlVersion}"
+    pax "org.ops4j.pax.url:pax-url-aether:${paxUrlVersion}"
+    pax "org.ops4j.base:ops4j-base-net:${ops4jVersion}"
+    pax "org.apache.felix:org.osgi.service.obr:1.0.2"
+    pax "org.apache.felix:org.apache.felix.bundlerepository:2.0.2"
+    pax "org.ops4j.pax.url:pax-url-obr:${paxUrlVersion}"
+    
     aspectj "org.aspectj:com.springsource.org.aspectj.weaver:${aspectjVersion}.RELEASE"
     
 }
 
-task setupVirgo( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'updateKernelRegionSshSettings', 'updateUserRegionSshSettings', 'updateFrameworkProperties', 'copyExtConfiguration' ] ) {}
+task setupVirgo( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installUserRegionBundles', 'updateKernelRegionSshSettings', 'updateUserRegionSshSettings', 'updateFrameworkProperties' ] ) {}
 
 task runVirgo(type:Exec) {
     def executableName = Os.isFamily( Os.FAMILY_WINDOWS ) ? "startup.bat" : "startup.sh"
@@ -85,6 +164,34 @@ task downloadAspectJ << {
     }
 }
 
+task installPaxUrl(dependsOn: [ 'downloadVirgo' ]) << {
+    configurations.pax.resolvedConfiguration.resolvedArtifacts.each {
+        artifact -> 
+           project.copy {
+               into new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/ext" ) 
+               from( artifact.file )
+           }
+    }
+    copy {
+        from "${projectDir}/src/main/config/ext"
+        into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/ext"
+    }
+    copy {
+        from "${projectDir}/src/main/plans"
+        into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup"
+    }
+}
+
+task installUserRegionBundles(dependsOn: [ 'downloadVirgo' ]) << {
+    configurations.compile.resolvedConfiguration.resolvedArtifacts.each {
+        artifact -> 
+           project.copy {
+               into new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/usr" ) 
+               from( artifact.file )
+           }
+    }
+}
+
 task updateKernelRegionSshSettings(type: UpdatePropertiesTask ) {
     source = "${projectDir}/src/main/config/kernel.osgi.console.properties"
     target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/osgi.console.properties"
@@ -101,11 +208,6 @@ task updateFrameworkProperties(type: UpdatePropertiesTask) {
     source = "${projectDir}/src/main/config/config.ini"
     target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/config.ini"
     shouldRunAfter downloadVirgo
-}
-
-task copyExtConfiguration << { // (type: Copy) {
-    // 
-    
 }
 
 task upgradeSpringAndAspectJ(type: UpdateSpringAndAspectJTask, dependsOn: [ 'downloadSpring', 'downloadAspectJ' ]) {
