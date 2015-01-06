@@ -2,6 +2,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 apply plugin: 'eclipse'
 apply plugin: 'java'
+apply plugin: UpdatePropertiesPlugin
 
 ext {
     virgoVersion = "3.6.3.RELEASE"
@@ -23,6 +24,7 @@ ext {
     liquibaseVersion = "3.2.0"
     restletVersion = "2.2.3"
 
+    yaasVersion = "1.0.0.M1"
 }
 
 configurations {
@@ -30,6 +32,7 @@ configurations {
     spring
     aspectj
     pax
+    yaas { transitive = false }
 }
 
 repositories {
@@ -85,6 +88,28 @@ dependencies {
     compile "javax.xml.bind:jaxb-api:${jaxbVersion}"
     compile "org.liquibase:liquibase-osgi:${liquibaseVersion}"
     
+    yaas "com.pennassurancesoftware.org.springframework:spring-aspects-osgi:3.2.11.RELEASE-SNAPSHOT"
+    yaas "com.yaas.module:yaas-annotations:${yaasVersion}"
+    yaas "com.yaas.module:yaas-beans:${yaasVersion}"
+    yaas "com.yaas.module:yaas-business-ul:${yaasVersion}"
+    yaas "com.yaas.module:yaas-commons:${yaasVersion}"
+    yaas "com.yaas.module:yaas-config:${yaasVersion}"
+    yaas "com.yaas.module:yaas-config-ul:${yaasVersion}"
+    yaas "com.yaas.module:yaas-core:${yaasVersion}"
+    yaas "com.yaas.module:yaas-db:${yaasVersion}"
+    yaas "com.yaas.module:yaas-dto:${yaasVersion}"
+    yaas "com.yaas.module:yaas-dto-ul:${yaasVersion}"
+    yaas "com.yaas.module:yaas-exception:${yaasVersion}"
+    yaas "com.yaas.module:yaas-policy:${yaasVersion}"
+    yaas "com.yaas.module:yaas-policy-ul:${yaasVersion}"
+    yaas "com.yaas.module:yaas-test:${yaasVersion}"
+    yaas "com.yaas.module:yaas-test-case-ul:${yaasVersion}"
+    yaas "com.yaas.module:yaas-xml:${yaasVersion}"
+    yaas "com.yaas.web:yaas-web:${yaasVersion}"
+    yaas "com.yaas.web:yaas-ws:${yaasVersion}"
+    yaas "com.yaas.web:yaas-ws-client:${yaasVersion}"
+    
+    
     virgo "org.eclipse.virgo:virgo-tomcat-server:${virgoVersion}"
     
     spring "org.apache.servicemix.bundles:org.apache.servicemix.bundles.spring-aop:${springVersion}_3"
@@ -124,7 +149,8 @@ dependencies {
     
 }
 
-task setupVirgo( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installUserRegionBundles', 'updateKernelRegionSshSettings', 'updateUserRegionSshSettings', 'updateFrameworkProperties' ] ) {}
+
+task setupVirgo( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installYaas', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings' ] ) {}
 
 task runVirgo(type:Exec) {
     def executableName = Os.isFamily( Os.FAMILY_WINDOWS ) ? "startup.bat" : "startup.sh"
@@ -177,7 +203,7 @@ task installPaxUrl(dependsOn: [ 'downloadVirgo' ]) << {
         into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/ext"
     }
     copy {
-        from "${projectDir}/src/main/plans"
+        from "${projectDir}/src/main/plans/pax-url.plan"
         into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup"
     }
 }
@@ -192,22 +218,33 @@ task installUserRegionBundles(dependsOn: [ 'downloadVirgo' ]) << {
     }
 }
 
-task updateKernelRegionSshSettings(type: UpdatePropertiesTask ) {
-    source = "${projectDir}/src/main/config/kernel.osgi.console.properties"
-    target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/osgi.console.properties"
-    shouldRunAfter downloadVirgo
+task installYaas(dependsOn: [ 'downloadVirgo' ]) << {
+    copy {
+        from "${projectDir}/src/main/plans/yaas.plan"
+        into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup"
+    }
+    configurations.yaas.resolvedConfiguration.resolvedArtifacts.each {
+        artifact -> 
+           project.copy {
+               into new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/usr" ) 
+               from( artifact.file ) 
+           }
+    }
 }
 
-task updateUserRegionSshSettings(type: UpdatePropertiesTask) {
-    source = "${projectDir}/src/main/config/user.osgi.console.properties"
-    target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/ext/osgi.console.properties"
-    shouldRunAfter downloadVirgo
-}
-
-task updateFrameworkProperties(type: UpdatePropertiesTask) {
-    source = "${projectDir}/src/main/config/config.ini"
-    target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/config.ini"
-    shouldRunAfter downloadVirgo
+task updateVirgoSettings { shouldRunAfter downloadVirgo } << {
+    updateProperties {
+        source = "${projectDir}/src/main/config/kernel.osgi.console.properties"
+        target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/osgi.console.properties"
+    }
+    updateProperties {
+        source = "${projectDir}/src/main/config/user.osgi.console.properties"
+        target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/ext/osgi.console.properties"
+    }
+    updateProperties {
+        source = "${projectDir}/src/main/config/config.ini"
+        target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/config.ini"
+    }
 }
 
 task upgradeSpringAndAspectJ(type: UpdateSpringAndAspectJTask, dependsOn: [ 'downloadSpring', 'downloadAspectJ' ]) {
@@ -230,6 +267,7 @@ buildscript {
         classpath 'commons-io:commons-io:2.4'
     }
 }
+
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
@@ -387,5 +425,34 @@ class UpdateSpringAndAspectJTask extends DefaultTask {
 		String newLine2 = "com.springsource.org.aspectj.weaver," + getAspectjVersion() + ",plugins/com.springsource.org.aspectj.weaver-" + getAspectjVersion() + ".jar,4,false";
 		content2 = content2.replace( oldLine2, newLine2 );
 		Files.write(path2, content2.getBytes(charset));
+    }
+}
+
+
+class UpdatePropertiesPlugin implements Plugin<Project> {
+    def void apply(Project project) {
+        project.convention.plugins.updateProperties = new UpdatePropertiesPluginConvention()
+    }
+}
+
+class UpdatePropertiesPluginConvention {
+    String target;
+    String source;
+
+    def updateProperties(Closure closure) {
+        closure.delegate = this
+        closure()
+        
+        Validate.notNull( target, "Must specify the property: target" );
+        Validate.notNull( source, "Must specify the property: source" );
+        PropertiesConfiguration src = new PropertiesConfiguration( source );
+        PropertiesConfiguration trgt = new PropertiesConfiguration( target );
+        Iterator keyIterator = src.getKeys();
+        while( keyIterator.hasNext() ) {
+            String key = keyIterator.next();
+            Object value = src.getProperty( key );
+            trgt.setProperty( key, value ); 
+        }
+        trgt.save();
     }
 }
