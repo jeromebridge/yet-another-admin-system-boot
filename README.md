@@ -9,7 +9,7 @@ Project that allows user to boot up the Yet Another Admin System
 All you need is a copy of [gradle](http://gradle.org/)
 
 
-### Getting Started with Getting Started
+### Getting Started
 
 * Clone this git repository...
 
@@ -20,4 +20,6 @@ All you need is a copy of [gradle](http://gradle.org/)
 
 <code>gradle setupVirgo runVirgo</code>
 
+* Navigate to the Yaas Home Page with this link: <a href="http://localhost:8080/yweb">http://localhost:8080/yweb</a>
 
+* Navigate to the Virgo Admin Console with this link: <a href="http://localhost:8080/admin">http://localhost:8080/admin</a>
