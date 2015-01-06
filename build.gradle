@@ -39,6 +39,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven { url "http://repo.pennassurancesoftware.com/repository/public/" }
+    maven { url "http://repo.pennassurancesoftware.com/repository/public-snapshots/" }
 }
 
 dependencies {
@@ -107,7 +108,7 @@ dependencies {
     yaas "com.yaas.module:yaas-xml:${yaasVersion}"
     yaas "com.yaas.web:yaas-web:${yaasVersion}"
     yaas "com.yaas.web:yaas-ws:${yaasVersion}"
-    yaas "com.yaas.web:yaas-ws-client:${yaasVersion}"
+    // yaas "com.yaas.web:yaas-ws-client:${yaasVersion}"
     
     
     virgo "org.eclipse.virgo:virgo-tomcat-server:${virgoVersion}"
