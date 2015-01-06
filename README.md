@@ -23,3 +23,6 @@ All you need is a copy of [gradle](http://gradle.org/)
 * Navigate to the Yaas Home Page with this link: <a href="http://localhost:8080/yweb">http://localhost:8080/yweb</a>
 
 * Navigate to the Virgo Admin Console with this link: <a href="http://localhost:8080/admin">http://localhost:8080/admin</a>
+
+    user: **admin**
+    pass: **springsource**
