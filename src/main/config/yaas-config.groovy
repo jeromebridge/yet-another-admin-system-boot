@@ -13,7 +13,7 @@ environments {
         yaas {
             db {
                 host = 'db'
-                user = 'yaas_app'
+                user = 'super'
                 password = 'postgres'
             }
         }
