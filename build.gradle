@@ -25,6 +25,7 @@ ext {
     restletVersion = "2.2.3"
 
     yaasVersion = "1.0.0.M1"
+
 }
 
 configurations {
@@ -32,7 +33,13 @@ configurations {
     spring
     aspectj
     pax
-    yaas { transitive = false }
+    yaas { 
+        transitive = false
+        resolutionStrategy {
+	        cacheDynamicVersionsFor 0, "seconds"
+	        cacheChangingModulesFor 0, "seconds"
+	    }
+    }
 }
 
 repositories {
@@ -150,7 +157,6 @@ dependencies {
     
 }
 
-
 task setupVirgo( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installYaas', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings' ] ) {}
 
 task runVirgo(type:Exec) {
@@ -231,6 +237,9 @@ task installYaas(dependsOn: [ 'downloadVirgo' ]) << {
                from( artifact.file ) 
            }
     }
+    new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/usr/com.yaas.properties" ).withWriter { writer ->
+      getYaasConfig().toProperties().store( writer, "Yet Another Admin System Properties" )
+    }
 }
 
 task updateVirgoSettings { shouldRunAfter downloadVirgo } << {
@@ -268,6 +277,15 @@ buildscript {
         classpath 'commons-io:commons-io:2.4'
     }
 }
+
+// Example of different environment: gradle -Penv=test setupVirgo
+def getYaasConfig() { 
+    def environment = hasProperty( 'env' ) ? env : 'dev'
+    println "Environment is set to $environment"
+    def configFile = file( 'src/main/config/yaas-config.groovy' )
+    return new ConfigSlurper( environment ).parse( configFile.toURL() )
+}
+
 
 
 import org.gradle.api.DefaultTask

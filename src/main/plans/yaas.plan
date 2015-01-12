@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plan name="yaas.plan" version="1.0.0" scoped="false" atomic="false" provisioning="auto" xmlns="http://www.eclipse.org/virgo/schema/plan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eclipse.org/virgo/schema/plan http://www.eclipse.org/virgo/schema/plan/eclipse-virgo-plan.xsd">
 
+    <artifact type="configuration" name="com.yaas" version="0" />
+
     <artifact type="bundle" name="com.pennassurancesoftware.org.springframework.spring-aspects-osgi" version="3.2.11.RELEASE-SNAPSHOT" />
     
     <artifact type="bundle" name="com.yaas.module.yaas-annotations" version="1.0.0.M1" />
