@@ -1,27 +1,29 @@
-mkdir -p /var/data/postgres/
+Script
+#################################################
+sudo mkdir -p /var/data/postgres/
 sudo chmod 666 -R /var/data/postgres/
 sudo rm -Rf /var/data/postgres/*
-
 sudo docker run -d --name=db -p 127.0.0.1:5432:5432 -v /var/data/postgres:/data -e USER="super" -e DB="yaas" -e PASS="postgres" paintedfox/postgresql
 
+sudo mkdir -p /var/data/git
+sudo chmod 666 -R /var/data/git
+sudo rm -Rf /var/data/git/*
+sudo git clone https://github.com/jeromebridge/yet-another-admin-system-boot.git /var/data/git/yet-another-admin-system-boot
+sudo docker run -d --name=app --link db:db -p 8080:8080 -v /var/data/git/yet-another-admin-system-boot:/app:rw niaquinto/gradle -Penv=docker setupVirgo runVirgo
+
+
+
+Notes
+#################################################
 sudo docker run -d --name=db -p 127.0.0.1:5432:5432 -v /var/data/postgres:/data -e USER="super" -e DB="yaas" -e PASS="$(pwgen -s -1 16)" paintedfox/postgresql
 
 sudo docker logs postgresql
-
-
 
 https://github.com/Painted-Fox/docker-postgresql/issues/30
 
   * Update /etc/default/docker.io
 
 DOCKER_OPTS="--storage-driver=devicemapper"
-
-
-
-cd ~/git
-git clone https://github.com/jeromebridge/yet-another-admin-system-boot.git
-
-sudo docker run -d --name=app --link db:db -p 8080:8080 -v /home/developer/git/yet-another-admin-system-boot:/app:rw niaquinto/gradle -Penv=docker setupVirgo runVirgo
 
 
 sudo docker logs -f app
