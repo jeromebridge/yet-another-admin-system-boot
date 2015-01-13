@@ -2,7 +2,7 @@ mkdir -p /var/data/postgres/
 sudo chmod 666 -R /var/data/postgres/
 sudo rm -Rf /var/data/postgres/*
 
-sudo docker run -d --name=db -p 127.0.0.1:5432:5432 -v /var/data/postgres:/data -e USER="yaas_app" -e DB="yaas" -e PASS="postgres" paintedfox/postgresql
+sudo docker run -d --name=db -p 127.0.0.1:5432:5432 -v /var/data/postgres:/data -e USER="super" -e DB="yaas" -e PASS="postgres" paintedfox/postgresql
 
 sudo docker run -d --name=db -p 127.0.0.1:5432:5432 -v /var/data/postgres:/data -e USER="super" -e DB="yaas" -e PASS="$(pwgen -s -1 16)" paintedfox/postgresql
 
