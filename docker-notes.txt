@@ -1,9 +1,31 @@
 Setup Swap (Digital Ocean)
 #################################################
-sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
-sudo chmod 600 /swapfile
-sudo mkswap /swapfile
-sudo swapon /swapfile
+sudo fallocate -l 2048m /2GiB.swap
+sudo chmod 600 /2GiB.swap
+sudo chattr +C /2GiB.swap
+sudo mkswap /2GiB.swap
+# ... added the swap.service unit to /usr/share/oem/cloud-config.yml ...
+sudo reboot
+
+
+units:
+    - name: swap.service
+      command: start
+      content: |
+        [Unit]
+        Description=Turn on swap
+
+        [Service]
+        Type=oneshot
+        Environment="SWAPFILE=/2GiB.swap"
+        RemainAfterExit=true
+        ExecStartPre=/usr/sbin/losetup -f ${SWAPFILE}
+        ExecStart=/usr/bin/sh -c "/sbin/swapon $(/usr/sbin/losetup -j ${SWAPFILE} | /usr/bin/cut -d : -f 1)"
+        ExecStop=/usr/bin/sh -c "/sbin/swapoff $(/usr/sbin/losetup -j ${SWAPFILE} | /usr/bin/cut -d : -f 1)"
+        ExecStopPost=/usr/bin/sh -c "/usr/sbin/losetup -d $(/usr/sbin/losetup -j ${SWAPFILE} | /usr/bin/cut -d : -f 1)"
+
+        [Install]
+        WantedBy=local.target
 
 
 Script
