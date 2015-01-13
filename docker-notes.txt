@@ -1,5 +1,7 @@
 Setup Swap (Digital Ocean)
 #################################################
+Instructions Here: https://github.com/coreos/docs/issues/52#issuecomment-51142602
+
 sudo fallocate -l 2048m /2GiB.swap
 sudo chmod 600 /2GiB.swap
 sudo chattr +C /2GiB.swap
