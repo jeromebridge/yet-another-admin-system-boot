@@ -269,6 +269,7 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
+        maven { url "http://repo.pennassurancesoftware.com/repository/public/" }
     }
         
     dependencies {
