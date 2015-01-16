@@ -43,10 +43,10 @@ configurations {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven { url "http://repo.pennassurancesoftware.com/repository/public/" }
     maven { url "http://repo.pennassurancesoftware.com/repository/public-snapshots/" }
+    mavenLocal()
 }
 
 dependencies {
@@ -267,9 +267,9 @@ task upgradeSpringAndAspectJ(type: UpdateSpringAndAspectJTask, dependsOn: [ 'dow
 
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
         maven { url "http://repo.pennassurancesoftware.com/repository/public/" }
+        mavenLocal()
     }
         
     dependencies {
