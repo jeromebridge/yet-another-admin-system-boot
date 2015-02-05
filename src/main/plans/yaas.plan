@@ -7,26 +7,25 @@
     
     
     <artifact type="bundle" name="com.yaas.module.yaas-annotations" version="1.0.0.M1" />
-    <artifact type="bundle" name="com.yaas.module.yaas-beans" version="1.0.0.M1" />
-    <artifact type="bundle" name="com.yaas.module.yaas-business-ul" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-commons" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-dictionary-api" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-dictionary-ul-api" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-xml" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-beans" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-environment" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-exception" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-lifecycle-api" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-business-ul" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-db" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-config" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-config-ul" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-core" version="1.0.0.M1" />
-    <artifact type="bundle" name="com.yaas.module.yaas-dictionary-api" version="1.0.0.M1" />
-    <artifact type="bundle" name="com.yaas.module.yaas-dictionary-ul-api" version="1.0.0.M1" />
-    <artifact type="bundle" name="com.yaas.module.yaas-environment" version="1.0.0.M1" />
-    <artifact type="bundle" name="com.yaas.module.yaas-db" version="1.0.0.M1" />
-    <artifact type="bundle" name="com.yaas.module.yaas-exception" version="1.0.0.M1" />
-    <artifact type="bundle" name="com.yaas.module.yaas-lifecycle-api" version="1.0.0.M1" />
-    <artifact type="bundle" name="com.yaas.module.yaas-policy" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-policy-api" version="1.0.0.M1" />
-    <artifact type="bundle" name="com.yaas.module.yaas-policy-ul" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-policy" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-policy-ul-api" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-policy-ul" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-test" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-test-case-ul" version="1.0.0.M1" />
-    <artifact type="bundle" name="com.yaas.module.yaas-xml" version="1.0.0.M1" />
-    
     <artifact type="bundle" name="com.yaas.web.yaas-ws" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.web.yaas-web" version="1.0.0.M1" />
     
