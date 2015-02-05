@@ -105,18 +105,22 @@ dependencies {
     yaas "com.yaas.module:yaas-config-ul:${yaasVersion}"
     yaas "com.yaas.module:yaas-core:${yaasVersion}"
     yaas "com.yaas.module:yaas-db:${yaasVersion}"
-    yaas "com.yaas.module:yaas-dto:${yaasVersion}"
-    yaas "com.yaas.module:yaas-dto-ul:${yaasVersion}"
+    yaas "com.yaas.module:yaas-dictionary-api:${yaasVersion}"
+    yaas "com.yaas.module:yaas-dictionary-ul-api:${yaasVersion}"
+    yaas "com.yaas.module:yaas-environment:${yaasVersion}"
     yaas "com.yaas.module:yaas-exception:${yaasVersion}"
+    yaas "com.yaas.module:yaas-lifecycle-api:${yaasVersion}"
     yaas "com.yaas.module:yaas-policy:${yaasVersion}"
+    yaas "com.yaas.module:yaas-policy-api:${yaasVersion}"
     yaas "com.yaas.module:yaas-policy-ul:${yaasVersion}"
+    yaas "com.yaas.module:yaas-policy-ul-api:${yaasVersion}"
     yaas "com.yaas.module:yaas-test:${yaasVersion}"
     yaas "com.yaas.module:yaas-test-case-ul:${yaasVersion}"
     yaas "com.yaas.module:yaas-xml:${yaasVersion}"
+    
     yaas "com.yaas.web:yaas-web:${yaasVersion}"
     yaas "com.yaas.web:yaas-ws:${yaasVersion}"
     // yaas "com.yaas.web:yaas-ws-client:${yaasVersion}"
-    
     
     virgo "org.eclipse.virgo:virgo-tomcat-server:${virgoVersion}"
     
