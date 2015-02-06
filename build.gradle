@@ -243,6 +243,7 @@ task installYaas(dependsOn: [ 'downloadVirgo' ]) << {
     new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/usr/com.yaas.properties" ).withWriter { writer ->
       getYaasConfig().toProperties().store( writer, "Yet Another Admin System Properties" )
     }
+    printConfig( getYaasConfig(), "Yaas Config" )
 }
 
 task updateVirgoSettings { shouldRunAfter downloadVirgo } << {
@@ -284,6 +285,19 @@ buildscript {
         classpath 'commons-lang:commons-lang:2.6'
         classpath 'commons-io:commons-io:2.4'
     }
+}
+
+def printConfig( config, title ) {
+    println("")
+    println("==========================================================")
+    println("${title}")
+    println("==========================================================")
+    Collections.list( config.toProperties().propertyNames() ).each() { 
+        def propVal = config.toProperties().getProperty( it );
+        println( "${it}=${propVal}" )
+    };
+    println("----------------------------------------------------------")
+    println("")
 }
 
 // Example of different environment: gradle -Penv=test setupVirgo
