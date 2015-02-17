@@ -59,3 +59,68 @@ DOCKER_OPTS="--storage-driver=devicemapper"
 
 
 sudo docker logs -f app
+
+
+
+
+
+
+
+
+2nd Notes
+#################################################
+
+sudo docker run -d --name=db -p 127.0.0.1:5432:5432 -v /var/data/postgres:/data -e USER="super" -e DB="yaas" -e PASS="postgres" paintedfox/postgresql
+
+
+
+
+
+
+
+
+
+
+
+sudo docker run -d --name=app --link db:db -p 8080:8080 -v /var/data/git/yet-another-admin-system-boot:/app:rw niaquinto/gradle -Penv=docker setupVirgo runVirgo
+sudo docker run -d --name=app --link db:db -p 8080:8080 -v /home/developer/git/yet-another-admin-system-boot:/app:rw -v /tmp/docker-gradle:/root/.gradle/caches:rw jeromebridge/yet-another-admin-system
+
+
+
+
+
+
+sudo docker run niaquinto/gradle
+
+
+## SHOW ENVIRONMENT VARIABLES
+sudo docker run --rm --name web2 --link db:db training/webapp env
+
+
+## DELETE ALL CONTAINERS IMAGES sudo
+docker AND stop $(sudo docker ps -a -q); sudo docker rm $(sudo docker ps -a -q); sudo docker rmi $(sudo docker images -q)
+
+
+## NEW DOCKER IMAGES
+sudo docker run -d --name=db -p 127.0.0.1:5432:5432 -e USER="super" -e DB="yaas" -e PASS="postgres" -e POSTGRES_PASS="postgres" pennassurancesoftware/postgresql
+sudo docker run -d --name=app --link db:db -p 8080:8080 -v /tmp/docker-gradle:/root/.gradle/caches:rw jeromebridge/yet-another-admin-system
+
+## NEW DOCKER IMAGES 2
+sudo docker run -d --name=db -e USER="super" -e DB="yaas" -e PASS="postgres" -e POSTGRES_PASS="postgres" pennassurancesoftware/postgresql
+sudo docker run -d --name=app --link db:db -v /tmp/docker-gradle:/root/.gradle/caches:rw jeromebridge/yet-another-admin-system
+sudo docker run -d --name=proxy -p 80:80 --link app:app1 -e BACKEND_PORT=8080 tutum/haproxy
+
+
+
+## CREATE SWAP (UBUNTU)
+sudo -s
+dd if=/dev/zero of=/swapfile bs=100M count=100
+ls -lh /swapfile
+chown root:root /swapfile
+chmod 0600 /swapfile
+ls -lh /swapfile
+mkswap /swapfile 
+swapon /swapfile
+swapon -s
+free -m
+echo "/swapfile none            swap    sw              0       0" >> /etc/fstab
