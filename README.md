@@ -13,7 +13,9 @@ All you need is a copy of [gradle](http://gradle.org/) and [docker](http://docke
 
 * Run the database in docker...
 
-<code>sudo docker run -d --name=db -p 5432:5432 -e USER="super" -e DB="yaas" -e PASS="postgres" -e POSTGRES_PASS="postgres" pennassurancesoftware/postgresql</code>
+````
+sudo docker run -d --name=db -p 5432:5432 -e USER="super" -e DB="yaas" -e PASS="postgres" -e POSTGRES_PASS="postgres" pennassurancesoftware/postgresql
+````
 
 * Clone this git repository...
 
