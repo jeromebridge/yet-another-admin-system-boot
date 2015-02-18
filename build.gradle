@@ -40,6 +40,7 @@ configurations {
 	        cacheChangingModulesFor 0, "seconds"
 	    }
     }
+    osgi_tools
 }
 
 repositories {
@@ -158,9 +159,31 @@ dependencies {
     
     aspectj "org.aspectj:com.springsource.org.aspectj.weaver:${aspectjVersion}.RELEASE"
     
+    osgi_tools "com.springsource.util:com.springsource.util.parser.manifest:2.0.5.RELEASE"
+    osgi_tools "org.eclipse.aether:aether-util:0.9.0.M2"
+    osgi_tools "org.eclipse.sisu:org.eclipse.sisu.inject:0.1.1"
+    osgi_tools "org.sonatype.sisu:sisu-guice:3.1.6"
+    osgi_tools "tools.osgi:osgi.analyzer:1.0.0-SNAPSHOT"
+    osgi_tools "org.apache.felix:org.apache.felix.shell:1.4.1"
+    osgi_tools "org.apache.httpcomponents:httpclient-osgi:4.2.6"
+    osgi_tools "org.apache.httpcomponents:httpcore-osgi:4.2.5"
+    osgi_tools "com.google.guava:guava:12.0"
+    osgi_tools "org.sonatype.sisu:sisu-inject-bean:2.3.0"
+    osgi_tools "javax.enterprise:cdi-api:1.2"
+    osgi_tools "org.sonatype.sisu:sisu-guava:0.9.9"
+    osgi_tools "org.slf4j:slf4j-api:1.7.5"
+    osgi_tools "com.springsource.util:com.springsource.util.osgi:2.0.5.RELEASE"
+    osgi_tools "org.eclipse.aether:aether-api:0.9.0.M2"
+    osgi_tools "org.slf4j:jcl-over-slf4j:1.6.2"
+    osgi_tools "com.springsource.util:com.springsource.util.common:2.0.5.RELEASE"
+    osgi_tools "tools.osgi:osgi.maven.integration:1.0.0-SNAPSHOT"
+    osgi_tools "ch.qos.logback:logback-core:1.0.7"
+    osgi_tools "ch.qos.logback:logback-classic:1.0.7"
 }
 
-task setupVirgo( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installYaas', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings' ] ) {}
+task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings' ] ) {}
+
+task setupVirgo( dependsOn: [ 'setupVirgoNoYaas', 'installYaas' ] ) {}
 
 task runVirgo(type:Exec) {
     def executableName = Os.isFamily( Os.FAMILY_WINDOWS ) ? "startup.bat" : "startup.sh"
@@ -215,6 +238,20 @@ task installPaxUrl(dependsOn: [ 'downloadVirgo' ]) << {
     copy {
         from "${projectDir}/src/main/plans/pax-url.plan"
         into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup"
+    }
+}
+
+task installOsgiTools(dependsOn: [ 'downloadVirgo' ]) << {
+    copy {
+        from "${projectDir}/src/main/plans/osgi-tools.plan"
+        into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup"
+    }
+    configurations.osgi_tools.resolvedConfiguration.resolvedArtifacts.each {
+        artifact -> 
+           project.copy {
+               into new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/usr" ) 
+               from( artifact.file )
+           }
     }
 }
 
