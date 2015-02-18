@@ -102,7 +102,7 @@ docker AND stop $(sudo docker ps -a -q); sudo docker rm $(sudo docker ps -a -q);
 
 
 ## NEW DOCKER IMAGES
-sudo docker run -d --name=db -p 127.0.0.1:5432:5432 -e USER="super" -e DB="yaas" -e PASS="postgres" -e POSTGRES_PASS="postgres" pennassurancesoftware/postgresql
+sudo docker run -d --name=db -p 5432:5432 -e USER="super" -e DB="yaas" -e PASS="postgres" -e POSTGRES_PASS="postgres" pennassurancesoftware/postgresql
 sudo docker run -d --name=app --link db:db -p 8080:8080 -v /tmp/docker-gradle:/root/.gradle/caches:rw jeromebridge/yet-another-admin-system
 
 sudo docker logs -f app
