@@ -17,6 +17,8 @@
     <artifact type="bundle" name="com.yaas.module.yaas-lifecycle-api" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-business-ul" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-db" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-rate-api" version="1.0.0.M1" />
+    <artifact type="bundle" name="com.yaas.module.yaas-rate" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-config" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-config-ul" version="1.0.0.M1" />
     <artifact type="bundle" name="com.yaas.module.yaas-core" version="1.0.0.M1" />

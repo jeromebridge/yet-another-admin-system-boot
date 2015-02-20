@@ -116,6 +116,8 @@ dependencies {
     yaas "com.yaas.module:yaas-policy-api:${yaasVersion}"
     yaas "com.yaas.module:yaas-policy-ul:${yaasVersion}"
     yaas "com.yaas.module:yaas-policy-ul-api:${yaasVersion}"
+    yaas "com.yaas.module:yaas-rate-api:${yaasVersion}"
+    yaas "com.yaas.module:yaas-rate:${yaasVersion}"
     yaas "com.yaas.module:yaas-test:${yaasVersion}"
     yaas "com.yaas.module:yaas-test-case-ul:${yaasVersion}"
     yaas "com.yaas.module:yaas-xml:${yaasVersion}"
