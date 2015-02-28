@@ -23,7 +23,7 @@ ext {
     jaxbVersion = "2.2.10"
     liquibaseVersion = "3.2.0"
     restletVersion = "2.2.3"
-    poiVersion = "3.9"
+    poiVersion = "3.11"
 
     yaasVersion = "1.0.0.M1"
 
@@ -72,7 +72,7 @@ dependencies {
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.oro:2.0.8_6"
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.reflections:0.9.8_1"
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.velocity:1.7_3"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.poi:${poiVersion}_2"
+    compile "com.pennassurancesoftware.bundles:org.apache.poi-osgi:${poiVersion}"
     compile "org.eclipse.persistence:javax.persistence:${jpaVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.core:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.jpa:${eclipselinkVersion}"
@@ -97,6 +97,8 @@ dependencies {
     compile "org.postgresql:com.springsource.org.postgresql.jdbc4:${postgresqlJdbc4Version}"
     compile "javax.xml.bind:jaxb-api:${jaxbVersion}"
     compile "org.liquibase:liquibase-osgi:${liquibaseVersion}"
+    compile "commons-codec:commons-codec:1.5"
+    
     
     yaas "com.pennassurancesoftware.org.springframework:spring-aspects-osgi:3.2.11.RELEASE-SNAPSHOT"
     yaas "com.yaas.module:yaas-annotations:${yaasVersion}"
