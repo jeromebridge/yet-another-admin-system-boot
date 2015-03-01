@@ -169,7 +169,7 @@ dependencies {
     osgi_tools "org.eclipse.aether:aether-util:0.9.0.M2"
     osgi_tools "org.eclipse.sisu:org.eclipse.sisu.inject:0.1.1"
     osgi_tools "org.sonatype.sisu:sisu-guice:3.1.6"
-    osgi_tools "tools.osgi:osgi.analyzer:1.0.0-SNAPSHOT"
+    osgi_tools "tools.osgi:osgi.analyzer:1.00.001-SNAPSHOT"
     osgi_tools "org.apache.felix:org.apache.felix.shell:1.4.1"
     osgi_tools "org.apache.httpcomponents:httpclient-osgi:4.2.6"
     osgi_tools "org.apache.httpcomponents:httpcore-osgi:4.2.5"
@@ -182,7 +182,7 @@ dependencies {
     osgi_tools "org.eclipse.aether:aether-api:0.9.0.M2"
     osgi_tools "org.slf4j:jcl-over-slf4j:1.6.2"
     osgi_tools "com.springsource.util:com.springsource.util.common:2.0.5.RELEASE"
-    osgi_tools "tools.osgi:osgi.maven.integration:1.0.0-SNAPSHOT"
+    osgi_tools "tools.osgi:osgi.maven.integration:1.00.001-SNAPSHOT"
     osgi_tools "ch.qos.logback:logback-core:1.0.7"
     osgi_tools "ch.qos.logback:logback-classic:1.0.7"
 }
