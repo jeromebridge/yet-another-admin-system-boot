@@ -41,7 +41,13 @@ configurations {
 	        cacheChangingModulesFor 0, "seconds"
 	    }
     }
-    osgi_tools
+    osgi_tools_dep
+    osgi_tools {
+        resolutionStrategy {
+            cacheDynamicVersionsFor 0, "seconds"
+            cacheChangingModulesFor 0, "seconds"
+        }
+    }
 }
 
 repositories {
@@ -165,26 +171,27 @@ dependencies {
     
     aspectj "org.aspectj:com.springsource.org.aspectj.weaver:${aspectjVersion}.RELEASE"
     
-    osgi_tools "com.springsource.util:com.springsource.util.parser.manifest:2.0.5.RELEASE"
-    osgi_tools "org.eclipse.aether:aether-util:0.9.0.M2"
-    osgi_tools "org.eclipse.sisu:org.eclipse.sisu.inject:0.1.1"
-    osgi_tools "org.sonatype.sisu:sisu-guice:3.1.6"
+    osgi_tools_dep "com.springsource.util:com.springsource.util.parser.manifest:2.0.5.RELEASE"
+    osgi_tools_dep "org.eclipse.aether:aether-util:0.9.0.M2"
+    osgi_tools_dep "org.eclipse.sisu:org.eclipse.sisu.inject:0.1.1"
+    osgi_tools_dep "org.sonatype.sisu:sisu-guice:3.1.6"
+    osgi_tools_dep "org.apache.felix:org.apache.felix.shell:1.4.1"
+    osgi_tools_dep "org.apache.httpcomponents:httpclient-osgi:4.2.6"
+    osgi_tools_dep "org.apache.httpcomponents:httpcore-osgi:4.2.5"
+    osgi_tools_dep "com.google.guava:guava:12.0"
+    osgi_tools_dep "org.sonatype.sisu:sisu-inject-bean:2.3.0"
+    osgi_tools_dep "javax.enterprise:cdi-api:1.2"
+    osgi_tools_dep "org.sonatype.sisu:sisu-guava:0.9.9"
+    osgi_tools_dep "org.slf4j:slf4j-api:1.7.5"
+    osgi_tools_dep "com.springsource.util:com.springsource.util.osgi:2.0.5.RELEASE"
+    osgi_tools_dep "org.eclipse.aether:aether-api:0.9.0.M2"
+    osgi_tools_dep "org.slf4j:jcl-over-slf4j:1.6.2"
+    osgi_tools_dep "com.springsource.util:com.springsource.util.common:2.0.5.RELEASE"
+    osgi_tools_dep "ch.qos.logback:logback-core:1.0.7"
+    osgi_tools_dep "ch.qos.logback:logback-classic:1.0.7"
+    
     osgi_tools "tools.osgi:osgi.analyzer:1.00.001-SNAPSHOT"
-    osgi_tools "org.apache.felix:org.apache.felix.shell:1.4.1"
-    osgi_tools "org.apache.httpcomponents:httpclient-osgi:4.2.6"
-    osgi_tools "org.apache.httpcomponents:httpcore-osgi:4.2.5"
-    osgi_tools "com.google.guava:guava:12.0"
-    osgi_tools "org.sonatype.sisu:sisu-inject-bean:2.3.0"
-    osgi_tools "javax.enterprise:cdi-api:1.2"
-    osgi_tools "org.sonatype.sisu:sisu-guava:0.9.9"
-    osgi_tools "org.slf4j:slf4j-api:1.7.5"
-    osgi_tools "com.springsource.util:com.springsource.util.osgi:2.0.5.RELEASE"
-    osgi_tools "org.eclipse.aether:aether-api:0.9.0.M2"
-    osgi_tools "org.slf4j:jcl-over-slf4j:1.6.2"
-    osgi_tools "com.springsource.util:com.springsource.util.common:2.0.5.RELEASE"
     osgi_tools "tools.osgi:osgi.maven.integration:1.00.001-SNAPSHOT"
-    osgi_tools "ch.qos.logback:logback-core:1.0.7"
-    osgi_tools "ch.qos.logback:logback-classic:1.0.7"
 }
 
 task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings' ] ) {}
@@ -252,6 +259,15 @@ task installOsgiTools(dependsOn: [ 'downloadVirgo' ]) << {
         from "${projectDir}/src/main/plans/osgi-tools.plan"
         into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup"
     }
+    
+    configurations.osgi_tools_dep.resolvedConfiguration.resolvedArtifacts.each {
+        artifact -> 
+           project.copy {
+               into new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/usr" ) 
+               from( artifact.file )
+           }
+    }
+    
     configurations.osgi_tools.resolvedConfiguration.resolvedArtifacts.each {
         artifact -> 
            project.copy {
