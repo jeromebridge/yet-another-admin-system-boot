@@ -171,6 +171,7 @@ dependencies {
     
     aspectj "org.aspectj:com.springsource.org.aspectj.weaver:${aspectjVersion}.RELEASE"
     
+    osgi_tools_dep "org.apache.commons:commons-lang3:${commonsLang3Version}"
     osgi_tools_dep "com.springsource.util:com.springsource.util.parser.manifest:2.0.5.RELEASE"
     osgi_tools_dep "org.eclipse.aether:aether-util:0.9.0.M2"
     osgi_tools_dep "org.eclipse.sisu:org.eclipse.sisu.inject:0.1.1"
@@ -317,6 +318,10 @@ task updateVirgoSettings { shouldRunAfter downloadVirgo } << {
     updateProperties {
         source = "${projectDir}/src/main/config/config.ini"
         target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/config.ini"
+    }
+    updateProperties {
+        source = "${projectDir}/src/main/config/java6-server.profile"
+        target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/java6-server.profile"
     }
 }
 
