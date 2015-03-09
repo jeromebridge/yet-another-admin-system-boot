@@ -319,6 +319,7 @@ task updateVirgoSettings { shouldRunAfter downloadVirgo } << {
         source = "${projectDir}/src/main/config/config.ini"
         target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/config.ini"
     }
+    // Hack to get Virgo to accept bundles that require Java 7 Execution Environment
     updateProperties {
         source = "${projectDir}/src/main/config/java6-server.profile"
         target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/java6-server.profile"
