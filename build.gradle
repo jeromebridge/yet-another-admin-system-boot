@@ -31,6 +31,9 @@ ext {
 }
 
 configurations {
+    compile {
+        transitive = false
+    }
     virgo
     spring
     aspectj
@@ -48,6 +51,9 @@ configurations {
             cacheDynamicVersionsFor 0, "seconds"
             cacheChangingModulesFor 0, "seconds"
         }
+    }
+    pickup {
+        transitive = false
     }
 }
 
@@ -72,7 +78,7 @@ dependencies {
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-dbcp:1.4_3"
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-digester:1.8_4"
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-jxpath:1.3_1"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-lang:2.4_6"
+    // compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-lang:2.4_6"
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-pool:1.5.4_4"
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.guava:11.0.2_2"
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.jaxb-impl:2.2.10_1"
@@ -88,12 +94,12 @@ dependencies {
     compile "org.eclipse.persistence:org.eclipse.persistence.antlr:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.moxy:${eclipselinkVersion}"
     compile "org.eclipse.virgo.mirrored:org.glassfish.com.sun.faces:2.1.18.v201304210537-virgo"
-    compile "org.restlet.osgi:org.restlet:${restletVersion}"
-    compile "org.restlet.osgi:org.restlet.ext.servlet:${restletVersion}"
-    compile "org.restlet.osgi:org.restlet.ext.xml:${restletVersion}"
-    compile "org.restlet.osgi:org.restlet.ext.jaxrs:${restletVersion}"
-    compile "org.restlet.osgi:org.restlet.ext.osgi:${restletVersion}"
-    compile "org.restlet.osgi:org.restlet.ext.jaxb:${restletVersion}"
+    // compile "org.restlet.osgi:org.restlet:${restletVersion}"
+    // compile "org.restlet.osgi:org.restlet.ext.servlet:${restletVersion}"
+    // compile "org.restlet.osgi:org.restlet.ext.xml:${restletVersion}"
+    // compile "org.restlet.osgi:org.restlet.ext.jaxrs:${restletVersion}"
+    // compile "org.restlet.osgi:org.restlet.ext.osgi:${restletVersion}"
+    // compile "org.restlet.osgi:org.restlet.ext.jaxb:${restletVersion}"
     compile "org.testng:testng:6.5.2"
     compile "com.atomikos:transactions-osgi:3.9.3"
     compile "javax.enterprise:cdi-api:${cdiVersion}"
@@ -105,7 +111,15 @@ dependencies {
     compile "javax.xml.bind:jaxb-api:${jaxbVersion}"
     compile "org.liquibase:liquibase-osgi:${liquibaseVersion}"
     compile "commons-codec:commons-codec:1.5"
-    compile "com.h2database:h2:1.4.186"
+    
+    compile "org.json:com.springsource.org.json:1.0.0"
+    compile "org.apache.ant:com.springsource.org.apache.tools.ant:1.7.0"
+    compile "org.jaxen:com.springsource.org.jaxen:1.1.1"
+    compile "org.relaxng:com.springsource.org.relaxng.datatype:1.0.0"
+    compile "org.javassist:javassist:3.17.1-GA"
+    compile "commons-lang:commons-lang:2.6"
+    
+    pickup "com.h2database:h2:${h2Version}"
     
     
     yaas "com.pennassurancesoftware.org.springframework:spring-aspects-osgi:3.2.11.RELEASE-SNAPSHOT"
@@ -197,7 +211,7 @@ dependencies {
     osgi_tools "tools.osgi:osgi.maven.integration:1.00.001-SNAPSHOT"
 }
 
-task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings' ] ) {}
+task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'installPickupBundles', 'installYaasDep' ] ) {}
 
 task setupVirgo( dependsOn: [ 'setupVirgoNoYaas', 'installYaas' ] ) {}
 
@@ -290,6 +304,16 @@ task installUserRegionBundles(dependsOn: [ 'downloadVirgo' ]) << {
     }
 }
 
+task installPickupBundles(dependsOn: [ 'downloadVirgo' ]) << {
+    configurations.pickup.resolvedConfiguration.resolvedArtifacts.each {
+        artifact -> 
+           project.copy {
+               into new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup" ) 
+               from( artifact.file )
+           }
+    }
+}
+
 task installYaas(dependsOn: [ 'downloadVirgo' ]) << {
     copy {
         from "${projectDir}/src/main/plans/yaas.plan"
@@ -306,6 +330,13 @@ task installYaas(dependsOn: [ 'downloadVirgo' ]) << {
       getYaasConfig().toProperties().store( writer, "Yet Another Admin System Properties" )
     }
     printConfig( getYaasConfig(), "Yaas Config" )
+}
+
+task installYaasDep(dependsOn: [ 'downloadVirgo' ]) << {
+    copy {
+        from "${projectDir}/src/main/plans/yaas-dep.plan"
+        into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup"
+    }
 }
 
 task updateVirgoSettings { shouldRunAfter downloadVirgo } << {
