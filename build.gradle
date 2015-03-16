@@ -47,6 +47,7 @@ configurations {
     }
     osgi_tools_dep
     osgi_tools {
+        transitive = false
         resolutionStrategy {
             cacheDynamicVersionsFor 0, "seconds"
             cacheChangingModulesFor 0, "seconds"
@@ -93,7 +94,7 @@ dependencies {
     compile "org.eclipse.persistence:org.eclipse.persistence.asm:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.antlr:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.moxy:${eclipselinkVersion}"
-    compile "org.eclipse.virgo.mirrored:org.glassfish.com.sun.faces:2.1.18.v201304210537-virgo"
+    compile "org.eclipse.virgo.mirrored:org.glassfish.com.sun.faces:2.1.18.v201304210537:virgo"
     // compile "org.restlet.osgi:org.restlet:${restletVersion}"
     // compile "org.restlet.osgi:org.restlet.ext.servlet:${restletVersion}"
     // compile "org.restlet.osgi:org.restlet.ext.xml:${restletVersion}"
