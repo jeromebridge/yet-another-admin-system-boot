@@ -59,8 +59,8 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven { url "http://repo.pennassurancesoftware.com/repository/public/" }
-    maven { url "http://repo.pennassurancesoftware.com/repository/public-snapshots/" }
+    maven { url "http://repo.pennassurancesoftware.com/artifactory/public/" }
+    maven { url "http://repo.pennassurancesoftware.com/artifactory/public-snapshots/" }
 }
 
 dependencies {
@@ -375,7 +375,7 @@ buildscript {
     repositories {
         // mavenLocal()
         mavenCentral()
-        maven { url "http://repo.pennassurancesoftware.com/repository/public/" }
+        maven { url "http://repo.pennassurancesoftware.com/artifactory/public/" }
     }
         
     dependencies {
