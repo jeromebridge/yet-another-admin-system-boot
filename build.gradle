@@ -207,6 +207,7 @@ dependencies {
     osgi_tools_dep "com.springsource.util:com.springsource.util.common:2.0.5.RELEASE"
     osgi_tools_dep "ch.qos.logback:logback-core:1.0.7"
     osgi_tools_dep "ch.qos.logback:logback-classic:1.0.7"
+    osgi_tools_dep  "commons-codec:commons-codec:1.10"
     
     osgi_tools "tools.osgi:osgi.analyzer:1.00.001-SNAPSHOT"
     osgi_tools "tools.osgi:osgi.maven.integration:1.00.001-SNAPSHOT"
