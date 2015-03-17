@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plan name="yaas-dep.plan" version="1.0.0" scoped="false" atomic="false" provisioning="auto" xmlns="http://www.eclipse.org/virgo/schema/plan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eclipse.org/virgo/schema/plan http://www.eclipse.org/virgo/schema/plan/eclipse-virgo-plan.xsd">
 
+   
+   <!--
+   
+   I want to use this service instead of the log4j implementation eventually:
+   
+   install mvn:org.ops4j.pax.logging/pax-logging-api/1.8.2
+   install mvn:org.ops4j.pax.logging/pax-logging-service/1.8.2
+   
+   -->
+   
+   <artifact type="bundle" name="slf4j.log4j12" version="1.6.1" />
+   <artifact type="bundle" name="slf4j.api" version="1.6.1" />
    <artifact type="bundle" name="com.springsource.org.apache.tools.ant" version="1.7.0" />
    <artifact type="bundle" name="org.liquibase.osgi" version="3.2.0" />
    <artifact type="bundle" name="org.apache.servicemix.bundles.commons-beanutils" version="1.8.3.2" />

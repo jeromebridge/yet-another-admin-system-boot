@@ -119,6 +119,11 @@ dependencies {
     compile "org.relaxng:com.springsource.org.relaxng.datatype:1.0.0"
     compile "org.javassist:javassist:3.17.1-GA"
     compile "commons-lang:commons-lang:2.6"
+    compile "org.ops4j.pax.logging:pax-logging-api:1.8.2"
+    compile "org.ops4j.pax.logging:pax-logging-service:1.8.2"
+    
+    compile "org.slf4j:slf4j-api:1.6.1"
+    compile "org.slf4j:slf4j-log4j12:1.6.1"
     
     pickup "com.h2database:h2:${h2Version}"
     
@@ -200,7 +205,7 @@ dependencies {
     osgi_tools_dep "org.sonatype.sisu:sisu-inject-bean:2.3.0"
     osgi_tools_dep "javax.enterprise:cdi-api:1.2"
     osgi_tools_dep "org.sonatype.sisu:sisu-guava:0.9.9"
-    osgi_tools_dep "org.slf4j:slf4j-api:1.7.5"
+    // osgi_tools_dep "org.slf4j:slf4j-api:1.7.5"
     osgi_tools_dep "com.springsource.util:com.springsource.util.osgi:2.0.5.RELEASE"
     osgi_tools_dep "org.eclipse.aether:aether-api:0.9.0.M2"
     osgi_tools_dep "org.slf4j:jcl-over-slf4j:1.6.2"
