@@ -16,6 +16,7 @@
    <artifact type="bundle" name="com.springsource.org.apache.tools.ant" version="1.7.0" />
    <artifact type="bundle" name="org.liquibase.osgi" version="3.2.0" />
    <artifact type="bundle" name="org.apache.servicemix.bundles.commons-beanutils" version="1.8.3.2" />
+   <artifact type="bundle" name="com.pennassurancesoftware.bundles.org.apache.poi-osgi" version="3.11" />
    <artifact type="bundle" name="javax.ws.rs.jsr311-api" version="1.1.1" />
    <artifact type="bundle" name="org.apache.commons.lang" version="2.6" />
    <artifact type="bundle" name="com.springsource.org.json" version="1.0.0" />

@@ -5,6 +5,7 @@ apply plugin: 'java'
 apply plugin: UpdatePropertiesPlugin
 
 ext {
+    virgoArtifactId = "virgo-tomcat-server"
     virgoVersion = "3.6.3.RELEASE"
     springVersion = "3.2.11.RELEASE"
     aspectjVersion = "1.7.1"
@@ -156,7 +157,7 @@ dependencies {
     yaas "com.yaas.web:yaas-ws:${yaasVersion}"
     // yaas "com.yaas.web:yaas-ws-client:${yaasVersion}"
     
-    virgo "org.eclipse.virgo:virgo-tomcat-server:${virgoVersion}"
+    virgo "org.eclipse.virgo:${virgoArtifactId}:${virgoVersion}"
     
     spring "org.apache.servicemix.bundles:org.apache.servicemix.bundles.spring-aop:${springVersion}_3"
     spring "org.apache.servicemix.bundles:org.apache.servicemix.bundles.spring-aspects:${springVersion}_2"
@@ -224,7 +225,7 @@ task setupVirgo( dependsOn: [ 'setupVirgoNoYaas', 'installYaas' ] ) {}
 
 task runVirgo(type:Exec) {
     def executableName = Os.isFamily( Os.FAMILY_WINDOWS ) ? "startup.bat" : "startup.sh"
-    commandLine "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/bin/" + executableName, "-debug", "-clean", "-Djava.protocol.handler.pkgs=org.ops4j.pax.url"
+    commandLine "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/bin/" + executableName, "-debug", "-clean", "-Djava.protocol.handler.pkgs=org.ops4j.pax.url"
 }
 
 task downloadVirgo << {
@@ -264,30 +265,30 @@ task installPaxUrl(dependsOn: [ 'downloadVirgo' ]) << {
     configurations.pax.resolvedConfiguration.resolvedArtifacts.each {
         artifact -> 
            project.copy {
-               into new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/ext" ) 
+               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ) 
                from( artifact.file )
            }
     }
     copy {
         from "${projectDir}/src/main/config/ext"
-        into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/ext"
+        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
     }
     copy {
         from "${projectDir}/src/main/plans/pax-url.plan"
-        into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup"
+        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
     }
 }
 
 task installOsgiTools(dependsOn: [ 'downloadVirgo' ]) << {
     copy {
         from "${projectDir}/src/main/plans/osgi-tools.plan"
-        into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup"
+        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
     }
     
     configurations.osgi_tools_dep.resolvedConfiguration.resolvedArtifacts.each {
         artifact -> 
            project.copy {
-               into new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/usr" ) 
+               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr" ) 
                from( artifact.file )
            }
     }
@@ -295,7 +296,7 @@ task installOsgiTools(dependsOn: [ 'downloadVirgo' ]) << {
     configurations.osgi_tools.resolvedConfiguration.resolvedArtifacts.each {
         artifact -> 
            project.copy {
-               into new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/usr" ) 
+               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr" ) 
                from( artifact.file )
            }
     }
@@ -305,7 +306,7 @@ task installUserRegionBundles(dependsOn: [ 'downloadVirgo' ]) << {
     configurations.compile.resolvedConfiguration.resolvedArtifacts.each {
         artifact -> 
            project.copy {
-               into new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/usr" ) 
+               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr" ) 
                from( artifact.file )
            }
     }
@@ -315,7 +316,7 @@ task installPickupBundles(dependsOn: [ 'downloadVirgo' ]) << {
     configurations.pickup.resolvedConfiguration.resolvedArtifacts.each {
         artifact -> 
            project.copy {
-               into new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup" ) 
+               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup" ) 
                from( artifact.file )
            }
     }
@@ -324,16 +325,16 @@ task installPickupBundles(dependsOn: [ 'downloadVirgo' ]) << {
 task installYaas(dependsOn: [ 'downloadVirgo' ]) << {
     copy {
         from "${projectDir}/src/main/plans/yaas.plan"
-        into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup"
+        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
     }
     configurations.yaas.resolvedConfiguration.resolvedArtifacts.each {
         artifact -> 
            project.copy {
-               into new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/usr" ) 
+               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr" ) 
                from( artifact.file ) 
            }
     }
-    new File( "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/usr/com.yaas.properties" ).withWriter { writer ->
+    new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr/com.yaas.properties" ).withWriter { writer ->
       getYaasConfig().toProperties().store( writer, "Yet Another Admin System Properties" )
     }
     printConfig( getYaasConfig(), "Yaas Config" )
@@ -342,32 +343,32 @@ task installYaas(dependsOn: [ 'downloadVirgo' ]) << {
 task installYaasDep(dependsOn: [ 'downloadVirgo' ]) << {
     copy {
         from "${projectDir}/src/main/plans/yaas-dep.plan"
-        into "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/pickup"
+        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
     }
 }
 
 task updateVirgoSettings { shouldRunAfter downloadVirgo } << {
     updateProperties {
         source = "${projectDir}/src/main/config/kernel.osgi.console.properties"
-        target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/osgi.console.properties"
+        target = "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/configuration/osgi.console.properties"
     }
     updateProperties {
         source = "${projectDir}/src/main/config/user.osgi.console.properties"
-        target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/repository/ext/osgi.console.properties"
+        target = "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext/osgi.console.properties"
     }
     updateProperties {
         source = "${projectDir}/src/main/config/config.ini"
-        target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/config.ini"
+        target = "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/configuration/config.ini"
     }
     // Hack to get Virgo to accept bundles that require Java 7 Execution Environment
     updateProperties {
         source = "${projectDir}/src/main/config/java6-server.profile"
-        target = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}/configuration/java6-server.profile"
+        target = "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/configuration/java6-server.profile"
     }
 }
 
 task upgradeSpringAndAspectJ(type: UpdateSpringAndAspectJTask, dependsOn: [ 'downloadSpring', 'downloadAspectJ' ]) {
-    virgoHomeFolderPath = "${buildDir}/staging/virgo/virgo-tomcat-server-${virgoVersion}"
+    virgoHomeFolderPath = "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}"
     springUpgradeFolderPath = "${buildDir}/staging/spring-upgrade"
     aspectjUpgradeFolderPath = "${buildDir}/staging/aspectj-upgrade"
     springUpgradeConfFolderPath = "${projectDir}/src/main/upgrade/spring"
