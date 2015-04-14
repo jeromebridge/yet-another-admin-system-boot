@@ -1,0 +1,83 @@
+##########################################################################
+## DEPLOYING SCRIPTING CONSOLE
+##########################################################################
+
+// install mvn:commons-io/commons-io/2.4
+// install mvn:commons-fileupload/commons-fileupload/1.3.1
+// install mvn:org.apache.felix/org.apache.felix.inventory/1.0.4
+
+// FELIX WEB CONSOLE
+install -start mvn:org.apache.felix/org.apache.felix.webconsole/4.2.8
+install -start mvn:org.apache.felix/org.apache.felix.webconsole.plugins.scriptconsole/1.0.0
+install -start mvn:org.codehaus.groovy/groovy-all/2.4.3
+
+// PAX WEB
+install -start mvn:org.ops4j.pax.web/pax-web-api/3.2.1
+install -start mvn:org.ops4j.pax.web/pax-web-spi/3.2.1
+install -start mvn:org.ops4j.pax.web/pax-web-runtime/3.2.1
+// install -start mvn:org.ops4j.pax.web/pax-web-jsp/3.2.1
+// install -start mvn:org.ops4j.pax.web/pax-web-tomcat/3.2.1
+  
+// PAX WEB -- ADDITIONAL
+install -start mvn:org.ops4j.pax.web/pax-web-jsp/3.2.1
+install -start mvn:org.ow2.asm/asm/5.0.3
+install -start mvn:org.ow2.asm/asm-tree/5.0.3
+install -start mvn:org.ow2.asm/asm-commons/5.0.3
+install -start mvn:org.apache.xbean/xbean-bundleutils/4.2
+install -start mvn:org.apache.xbean/xbean-finder/4.2
+install -start mvn:org.ops4j.pax.web/pax-web-extender-war/3.2.1
+
+// JETTY
+install -start mvn:org.eclipse.jetty/jetty-util/8.1.15.v20140411
+install -start mvn:org.eclipse.jetty/jetty-io/8.1.15.v20140411
+install -start mvn:org.eclipse.jetty/jetty-http/8.1.15.v20140411
+install -start mvn:org.eclipse.jetty/jetty-continuation/8.1.15.v20140411
+install -start mvn:org.eclipse.jetty/jetty-server/8.1.15.v20140411
+install -start mvn:org.eclipse.jetty/jetty-security/8.1.15.v20140411
+install -start mvn:org.eclipse.jetty/jetty-xml/8.1.15.v20140411
+install -start mvn:org.eclipse.jetty/jetty-servlet/8.1.15.v20140411
+
+PAX WEB - JETTY
+install -start mvn:org.ops4j.pax.web/pax-web-jetty/3.2.1
+
+// TODO: Figure out why even is fired that causes errors in Virgo
+
+
+
+
+
+
+
+// EXAMPLE GROOVY SCRIPT
+
+import org.osgi.service.http.HttpService
+import org.osgi.framework.FrameworkUtil
+import org.osgi.framework.Bundle
+import com.yaas.commons.api.bundle.provider.IBundleProviderContext
+import com.yaas.commons.api.bundle.provider.registry.IBundleProviderRegistry
+import com.yaas.rate.api.IRateTableRegistry
+
+out.println ("Hello world!!");
+
+def httpService = osgi.getService(org.osgi.service.http.HttpService.class)
+out.println( httpService );
+
+def eventPlugin = osgi.getServices(javax.servlet.Servlet.class,'(felix.webconsole.label=events)')[0]
+
+def srv2 = osgi.getService( com.yaas.commons.internal.bundle.provider.BundleProviderContext.class );
+
+osgi.getServices( IBundleProviderContext.class, null ).each{
+  println it
+}
+
+osgi.getServices( IBundleProviderRegistry.class, null ).each{
+  // println it.id + " " + it.overrideContext
+}
+
+def srv = osgi.getService( IRateTableRegistry.class )
+srv.getRateTables().each {
+  println it.id
+}
+
+out.println( src );
+
