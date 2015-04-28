@@ -12,6 +12,7 @@ ext {
     ops4jVersion = "1.5.0"
     paxUrlVersion = "2.2.0"
     paxSwissboxVersion = "1.8.0"
+    paxWebVersion = "4.1.1"
     
     jpaVersion = "2.1.0"
     eclipselinkVersion = "2.5.2"
@@ -26,6 +27,7 @@ ext {
     restletVersion = "2.2.3"
     poiVersion = "3.11"
     h2Version = "1.4.186"
+    jettyVersion = "9.2.11.M0"
 
     yaasVersion = "1.0.0.M1"
 
@@ -39,6 +41,11 @@ configurations {
     spring
     aspectj
     pax
+    pax_web
+    jetty_httpservice
+    jetty {
+        transitive = false
+    }
     yaas { 
         transitive = false
         resolutionStrategy {
@@ -192,6 +199,69 @@ dependencies {
     pax "org.apache.felix:org.apache.felix.bundlerepository:2.0.2"
     pax "org.ops4j.pax.url:pax-url-obr:${paxUrlVersion}"
     
+    pax_web "org.ops4j.pax.web:pax-web-api:${paxWebVersion}"
+    pax_web "org.ops4j.pax.web:pax-web-spi:${paxWebVersion}"
+    pax_web "org.ops4j.pax.web:pax-web-runtime:${paxWebVersion}"
+    
+    pax_web "org.apache.xbean:xbean-finder:4.2"
+    pax_web "org.ops4j.pax.web:pax-web-jetty:${paxWebVersion}"
+    
+    jetty_httpservice "org.eclipse.equinox:org.eclipse.equinox.http.servlet:1.1.400.v20130418"
+    jetty_httpservice "org.eclipse.jetty.osgi:jetty-httpservice:${jettyVersion}"
+    
+    // jetty "javax.servlet:javax.servlet-api:3.0.1"
+    // jetty "org.eclipse.jetty.toolchain:jetty-osgi-servlet-api:3.1.0.M3"
+    // jetty "org.eclipse.equinox:org.eclipse.equinox.http.servlet:1.1.400.v20130418"
+    
+    jetty "org.ow2.asm:asm:5.0.1"
+    jetty "org.ow2.asm:asm-commons:5.0.1"
+    jetty "org.ow2.asm:asm-tree:5.0.1"
+    jetty "org.apache.aries:org.apache.aries.util:1.1.0"
+    jetty "org.apache.aries.spifly:org.apache.aries.spifly.dynamic.bundle:1.0.2"
+    jetty "javax.annotation:javax.annotation-api:1.2"
+    
+    
+    jetty "org.eclipse.jetty:jetty-annotations:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-client:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-cdi:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-continuation:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-deploy:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-http:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-io:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-jmx:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-jndi:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-plus:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-rewrite:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-security:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-server:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-servlet:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-servlets:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-util:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
+    jetty "org.eclipse.jetty:jetty-xml:${jettyVersion}"
+    jetty "org.eclipse.jetty.toolchain:jetty-osgi-servlet-api:3.1.0.M3"
+    
+    
+    jetty "org.eclipse.jetty.osgi:jetty-httpservice:${jettyVersion}"
+    jetty "org.eclipse.jetty.osgi:jetty-osgi-boot:${jettyVersion}"
+    jetty "org.eclipse.jetty.osgi:jetty-osgi-boot-jsp:${jettyVersion}"
+    
+    jetty "org.eclipse.jetty.websocket:websocket-servlet:9.3.0.M2"
+    
+    
+    jetty "org.ops4j.pax.web:pax-web-api:${paxWebVersion}"
+    jetty "org.ops4j.pax.web:pax-web-spi:${paxWebVersion}"
+    jetty "org.ops4j.pax.web:pax-web-runtime:${paxWebVersion}"
+    
+    jetty "org.apache.xbean:xbean-bundleutils:4.2"
+    jetty "org.apache.xbean:xbean-finder:4.2"
+    
+    jetty "org.ops4j.pax.web:pax-web-jetty:${paxWebVersion}"
+    
+    jetty "commons-fileupload:commons-fileupload:1.3.1"
+    jetty "org.everit.osgi.bundles:org.everit.osgi.bundles.javax.servlet.api:3.1.0" // Servlet API 2.7
+
+
     aspectj "org.aspectj:com.springsource.org.aspectj.weaver:${aspectjVersion}.RELEASE"
     
     osgi_tools_dep "org.apache.commons:commons-lang3:${commonsLang3Version}"
@@ -219,7 +289,9 @@ dependencies {
     osgi_tools "tools.osgi:osgi.maven.integration:1.00.001-SNAPSHOT"
 }
 
-task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'installPickupBundles', 'installYaasDep' ] ) {}
+task setupVirgoQuick( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'upgradeSpringAndAspectJ', 'updateVirgoSettings', 'removeVirgoSplash' ] ) {}
+
+task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeJetty', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'removeVirgoSplash', 'installPickupBundles', 'installYaasDep' ] ) {}
 
 task setupVirgo( dependsOn: [ 'setupVirgoNoYaas', 'installYaas' ] ) {}
 
@@ -279,6 +351,24 @@ task installPaxUrl(dependsOn: [ 'downloadVirgo' ]) << {
     }
 }
 
+task installPaxWeb(dependsOn: [ 'downloadVirgo' ]) << {
+    configurations.pax_web.resolvedConfiguration.resolvedArtifacts.each {
+        artifact -> 
+           project.copy {
+               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ) 
+               from( artifact.file )
+           }
+    }
+    copy {
+        from "${projectDir}/src/main/config/ext"
+        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
+    }
+    copy {
+        from "${projectDir}/src/main/plans/pax-web.plan"
+        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
+    }
+}
+
 task installOsgiTools(dependsOn: [ 'downloadVirgo' ]) << {
     copy {
         from "${projectDir}/src/main/plans/osgi-tools.plan"
@@ -299,6 +389,84 @@ task installOsgiTools(dependsOn: [ 'downloadVirgo' ]) << {
                into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr" ) 
                from( artifact.file )
            }
+    }
+}
+
+task installHttpService(dependsOn: [ 'downloadVirgo', 'upgradeJetty' ]) << {
+    if( isJettyVirgo() ) {
+	    copy {
+	        from "${projectDir}/src/main/plans/jetty-httpservice.plan"
+	        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
+	    }
+	    configurations.jetty_httpservice.resolvedConfiguration.resolvedArtifacts.each {
+	        artifact -> 
+	           project.copy {
+	               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ) 
+	               from( artifact.file )
+	           }
+	    }
+	    addSystemProperty( "jetty.etc.config.urls", "etc/jetty.xml,etc/jetty-deploy.xml,etc/jetty-annotations.xml,etc/jetty-plus.xml,etc/jetty-http.xml" );
+	    copy {
+            from "${projectDir}/src/main/config/jetty/etc"
+            into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/jetty/etc"
+        }
+	}
+}
+
+task upgradeJetty(dependsOn: [ 'downloadVirgo' ]) << {
+    if( isJettyVirgo() ) {
+        // Remove Jetty Jars
+        ant.delete( includeEmptyDirs: 'true' ) {
+	        fileset(
+	            dir: file( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ), 
+	            includes: "*jetty-*.jar"
+	        )
+	    }
+	    
+	    // Remove Servlet API Jars
+	    ant.delete( includeEmptyDirs: 'true' ) {
+            fileset(
+                dir: file( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ), 
+                includes: "*javax.servlet*.jar"
+            )
+        }
+        ant.delete( includeEmptyDirs: 'true' ) {
+            fileset(
+                dir: file( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ), 
+                includes: "servlet*.jar"
+            )
+        }
+        
+        // Remove File Upload Jars
+        ant.delete( includeEmptyDirs: 'true' ) {
+	        fileset(
+	            dir: file( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ), 
+	            includes: "*com.springsource*fileupload*-*.jar"
+	        )
+	    }
+        
+        configurations.pax.resolvedConfiguration.resolvedArtifacts.each {
+	        artifact -> 
+	           project.copy {
+	               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ) 
+	               from( artifact.file )
+	           }
+	    }
+	    configurations.jetty.resolvedConfiguration.resolvedArtifacts.each {
+	        artifact -> 
+	           project.copy {
+	               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ) 
+	               from( artifact.file )
+	           }
+	    }
+	    copy {
+            from "${projectDir}/src/main/plans/org.eclipse.virgo.jetty.web-3.5.0.RELEASE.plan"
+            into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
+        }
+        copy {
+	        from "${projectDir}/src/main/config/ext/org.ops4j.pax.web.properties"
+	        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
+	    }
     }
 }
 
@@ -367,6 +535,15 @@ task updateVirgoSettings { shouldRunAfter downloadVirgo } << {
     }
 }
 
+task removeVirgoSplash { shouldRunAfter downloadVirgo } << {
+    ant.delete( includeEmptyDirs: 'true' ) {
+        fileset(
+            dir: file( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup" ), 
+            includes: "*splash*.jar"
+        )
+    }
+}
+
 task upgradeSpringAndAspectJ(type: UpdateSpringAndAspectJTask, dependsOn: [ 'downloadSpring', 'downloadAspectJ' ]) {
     virgoHomeFolderPath = "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}"
     springUpgradeFolderPath = "${buildDir}/staging/spring-upgrade"
@@ -391,6 +568,45 @@ buildscript {
         classpath 'commons-lang:commons-lang:2.6'
         classpath 'commons-io:commons-io:2.4'
     }
+}
+
+def addSystemProperty( propName, propValue ) {
+    
+    // Windows
+    insertBefore( 
+        "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/bin/dmk.bat",
+        "      set KERNEL_JAVA_PARMS=%KERNEL_JAVA_PARMS% -D${propName}=\"${propValue}\"", 
+        { line -> line.contains( "KERNEL_JAVA_PARMS" ) && line.contains( "-D" ) } 
+    );
+    
+    // Unix
+    insertBefore( 
+        "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/bin/dmk.sh",
+        "            -D${propName}=\"${propValue}\" \\", 
+        { line -> line.contains( "-Djava.security.auth" ) } 
+    );
+}
+
+def insertBefore( filePath, txt, lineChk ) {
+    Path path = Paths.get( filePath );
+    Charset charset = StandardCharsets.UTF_8;
+    String content = new String(Files.readAllBytes(path), charset);
+    StringWriter stringWriter = new StringWriter();
+    PrintWriter writer = new PrintWriter( stringWriter );
+    Scanner scanner = new Scanner(content);
+    boolean lineAddedFlag = false;
+    while (scanner.hasNextLine()) {
+        String line = scanner.nextLine();
+        if( !lineAddedFlag ) {
+            if( lineChk.call( line ) ) {
+                lineAddedFlag=true;
+                writer.println( txt );
+            }
+        }
+        writer.println(line)
+    }
+    scanner.close();
+    Files.write(path, stringWriter.toString().getBytes(charset));
 }
 
 def printConfig( config, title ) {
@@ -427,6 +643,10 @@ def getYaasConfig() {
 def getPropertyOverride( key, value ) {
     def result = hasProperty( key ) ? getProperty( key ) : value
     return result
+}
+
+def isJettyVirgo() {
+    return virgoArtifactId.contains( 'jetty' );
 }
 
 

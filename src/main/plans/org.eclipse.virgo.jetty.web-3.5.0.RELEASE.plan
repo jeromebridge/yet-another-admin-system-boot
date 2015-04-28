@@ -1,0 +1,64 @@
+<plan name="org.eclipse.virgo.jetty.web" version="3.5.0" scoped="false" atomic="false"
+                xmlns="http://www.eclipse.org/virgo/schema/plan"
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="
+				        http://www.eclipse.org/virgo/schema/plan 
+				        http://www.eclipse.org/virgo/schema/plan/eclipse-virgo-plan.xsd">
+		
+		
+		<artifact type="bundle" name="org.eclipse.jetty.osgi-servlet-api" version="[3.1,4.0)" />
+        
+        <artifact type="bundle" name="org.eclipse.jetty.util" version="[9.0, 10.0)" />
+        <artifact type="bundle" name="org.eclipse.jetty.io" version="[9.0, 10.0)" />
+        <artifact type="bundle" name="org.eclipse.jetty.http" version="[9.0, 10.0)" />
+        <artifact type="bundle" name="org.eclipse.jetty.continuation" version="[9.0, 10.0)" />
+        <artifact type="bundle" name="org.eclipse.jetty.server" version="[9.0, 10.0)" />
+        <artifact type="bundle" name="org.eclipse.jetty.security" version="[9.0, 10.0)" />
+        <artifact type="bundle" name="org.eclipse.jetty.xml" version="[9.0, 10.0)" />
+        <artifact type="bundle" name="org.eclipse.jetty.servlet" version="[9.0, 10.0)" />
+        
+        <artifact type="bundle" name="org.objectweb.asm" version="[5.0, 6.0)" />
+        <artifact type="bundle" name="org.objectweb.asm.commons" version="[5.0, 6.0)" />
+        <artifact type="bundle" name="org.objectweb.asm.tree" version="[5.0, 6.0)" />
+        <artifact type="bundle" name="org.apache.aries.util" version="[1.0, 2.0)" />
+        <artifact type="bundle" name="org.apache.aries.spifly.dynamic.bundle" version="[1.0, 2.0)" />
+        <artifact type="bundle" name="javax.annotation-api" version="[1.2, 2.0)" />
+        
+        
+        <artifact type="bundle" name="org.eclipse.jetty.jndi" version="[9.0, 10.0)" />
+        <artifact type="bundle" name="org.eclipse.jetty.plus" version="[9.0, 10.0)" />
+        <artifact type="bundle" name="org.eclipse.jetty.annotations" version="[9.0, 10.0)" />
+        
+        
+        <artifact type="bundle" name="org.eclipse.jetty.osgi.boot" version="[9.0, 10.0)"/>
+        
+        
+        <artifact type="configuration" name="org.ops4j.pax.web" version="0" />
+
+        <!-- OPS4J Base Bundles -->
+        <artifact type="bundle" name="org.ops4j.base.lang" version="1.4.0" />
+        <artifact type="bundle" name="org.ops4j.base.io" version="1.4.0" />
+        <artifact type="bundle" name="org.ops4j.base.monitors" version="1.4.0" />
+        <artifact type="bundle" name="jackson-core-asl" version="1.9.13" />
+        <artifact type="bundle" name="org.ops4j.pax.swissbox.core" version="1.7.1" />
+        <artifact type="bundle" name="org.ops4j.base.util.property" version="1.4.0" />
+        <artifact type="bundle" name="org.ops4j.pax.swissbox.property" version="1.7.1" />
+        <artifact type="bundle" name="org.ops4j.pax.swissbox.lifecycle" version="1.7.1" />
+        <artifact type="bundle" name="org.ops4j.pax.swissbox.tracker" version="1.7.1" />
+        
+        <!-- PAX Web -->
+        <artifact type="bundle" name="org.ops4j.pax.web.pax-web-api" version="[4.0, 5.0)" />
+        <artifact type="bundle" name="org.ops4j.pax.web.pax-web-spi" version="[4.0, 5.0)" />
+        <artifact type="bundle" name="org.ops4j.pax.web.pax-web-runtime" version="[4.0, 5.0)" />
+        
+        
+        <artifact type="bundle" name="org.apache.xbean.bundleutils" version="[4.1, 5.0)" />
+        <artifact type="bundle" name="org.apache.xbean.finder" version="[4.1, 5.0)" />
+        <artifact type="bundle" name="org.ops4j.pax.web.pax-web-jetty" version="[4.0, 5.0)" />
+        
+        
+        
+        
+        <artifact type="bundle" name="org.eclipse.virgo.web.dm" version="[3.1, 4.0)"/>
+
+</plan>

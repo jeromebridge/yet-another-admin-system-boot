@@ -11,6 +11,8 @@ install -start mvn:org.apache.felix/org.apache.felix.webconsole/4.2.8
 install -start mvn:org.apache.felix/org.apache.felix.webconsole.plugins.scriptconsole/1.0.0
 install -start mvn:org.codehaus.groovy/groovy-all/2.4.3
 
+// 4.1.1
+
 // PAX WEB
 install -start mvn:org.ops4j.pax.web/pax-web-api/3.2.1
 install -start mvn:org.ops4j.pax.web/pax-web-spi/3.2.1
@@ -28,23 +30,49 @@ install -start mvn:org.apache.xbean/xbean-finder/4.2
 install -start mvn:org.ops4j.pax.web/pax-web-extender-war/3.2.1
 
 // JETTY
-install -start mvn:org.eclipse.jetty/jetty-util/8.1.15.v20140411
-install -start mvn:org.eclipse.jetty/jetty-io/8.1.15.v20140411
-install -start mvn:org.eclipse.jetty/jetty-http/8.1.15.v20140411
-install -start mvn:org.eclipse.jetty/jetty-continuation/8.1.15.v20140411
-install -start mvn:org.eclipse.jetty/jetty-server/8.1.15.v20140411
-install -start mvn:org.eclipse.jetty/jetty-security/8.1.15.v20140411
-install -start mvn:org.eclipse.jetty/jetty-xml/8.1.15.v20140411
-install -start mvn:org.eclipse.jetty/jetty-servlet/8.1.15.v20140411
+install -start mvn:org.eclipse.jetty/jetty-ajp/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-annotations/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-client/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-continuation/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-deploy/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-http/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-httpservice/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-io/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-jmx/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-jndi/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-osgi-boot/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-osgi-boot-jsp/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-plus/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-policy/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-rewrite/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-security/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-server/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-servlet/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-servlets/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-util/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-webapp/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-websocket/8.1.3.v20120416
+install -start mvn:org.eclipse.jetty/jetty-xml/8.1.3.v20120416
+
 
 PAX WEB - JETTY
 install -start mvn:org.ops4j.pax.web/pax-web-jetty/3.2.1
 
-// TODO: Figure out why even is fired that causes errors in Virgo
+// TODO: Figure out why event is fired that causes errors in Virgo
+
+// Equinox Servlet Bridge
+install -start http://repository.grepcode.com/java/eclipse.org/4.3.1/plugins/org.eclipse.equinox.http.servlet_1.1.400.v20130418-1354.jar
+install -start mvn:org.eclipse.jetty.osgi/jetty-httpservice/8.1.3.v20120416
 
 
+install -start mvn:org.eclipse.equinox/org.eclipse.equinox.http.servlet/1.1.500.v20140318
+
+// TODO: try to upgrade jetty to see if it supports the Yaas app...seems to be issues loading resources from the web bundle with current setup
 
 
+// Servlet 3.1
+install -start mvn:javax.servlet/javax.servlet-api/3.0.1
+<artifact type="bundle" name="org.eclipse.virgo.web.servlet.adapter" version="[3.0, 4.0)"/>
 
 
 
@@ -81,3 +109,68 @@ srv.getRateTables().each {
 
 out.println( src );
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// JETTY 9
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-annotations/9.2.11.M0/jetty-annotations-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-project/9.2.11.M0/jetty-project-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-client/9.2.11.M0/jetty-client-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-cdi/9.2.11.M0/jetty-cdi-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-continuation/9.2.11.M0/jetty-continuation-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-deploy/9.2.11.M0/jetty-deploy-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-http/9.2.11.M0/jetty-http-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-io/9.2.11.M0/jetty-io-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-jmx/9.2.11.M0/jetty-jmx-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-jndi/9.2.11.M0/jetty-jndi-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-plus/9.2.11.M0/jetty-plus-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-rewrite/9.2.11.M0/jetty-rewrite-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-security/9.2.11.M0/jetty-security-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-server/9.2.11.M0/jetty-server-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-servlet/9.2.11.M0/jetty-servlet-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-servlets/9.2.11.M0/jetty-servlets-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-util/9.2.11.M0/jetty-util-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-webapp/9.2.11.M0/jetty-webapp-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-xml/9.2.11.M0/jetty-xml-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/osgi/jetty-httpservice/9.2.11.M0/jetty-httpservice-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/osgi/jetty-osgi-project/9.2.11.M0/jetty-osgi-project-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/osgi/jetty-osgi-boot/9.2.11.M0/jetty-osgi-boot-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/osgi/jetty-osgi-boot-jsp/9.2.11.M0/jetty-osgi-boot-jsp-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/apache-jsp/9.2.11.M0/apache-jsp-9.2.11.M0.pom
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-annotations/9.2.11.M0/jetty-annotations-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-client/9.2.11.M0/jetty-client-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-cdi/9.2.11.M0/jetty-cdi-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-continuation/9.2.11.M0/jetty-continuation-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-deploy/9.2.11.M0/jetty-deploy-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-http/9.2.11.M0/jetty-http-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-io/9.2.11.M0/jetty-io-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-jmx/9.2.11.M0/jetty-jmx-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-jndi/9.2.11.M0/jetty-jndi-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-plus/9.2.11.M0/jetty-plus-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-rewrite/9.2.11.M0/jetty-rewrite-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-security/9.2.11.M0/jetty-security-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-server/9.2.11.M0/jetty-server-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-servlet/9.2.11.M0/jetty-servlet-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-servlets/9.2.11.M0/jetty-servlets-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-util/9.2.11.M0/jetty-util-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-webapp/9.2.11.M0/jetty-webapp-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-xml/9.2.11.M0/jetty-xml-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/osgi/jetty-httpservice/9.2.11.M0/jetty-httpservice-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/osgi/jetty-osgi-boot/9.2.11.M0/jetty-osgi-boot-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/osgi/jetty-osgi-boot-jsp/9.2.11.M0/jetty-osgi-boot-jsp-9.2.11.M0.jar
+Download https://repo1.maven.org/maven2/org/eclipse/jetty/apache-jsp/9.2.11.M0/apache-jsp-9.2.11.M0.jar
