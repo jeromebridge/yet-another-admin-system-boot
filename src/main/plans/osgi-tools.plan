@@ -10,7 +10,7 @@
     <artifact type="bundle" name="org.apache.commons.codec" version="1.10.0" />
     <artifact type="bundle" name="javax.enterprise.cdi-api" version="1.2.0" />
     <artifact type="bundle" name="com.springsource.util.osgi" version="2.0.5.RELEASE" />
-    <artifact type="bundle" name="jcl.over.slf4j" version="1.6.2" />
+    <!-- <artifact type="bundle" name="jcl.over.slf4j" version="1.6.2" /> -->
     <artifact type="bundle" name="com.springsource.util.common" version="2.0.5.RELEASE" />
     <artifact type="bundle" name="tools.osgi.osgi.maven.integration" version="1.0.0.SNAPSHOT" />
 

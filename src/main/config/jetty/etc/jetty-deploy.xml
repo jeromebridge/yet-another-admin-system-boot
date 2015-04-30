@@ -56,7 +56,26 @@
             </New>
           </Arg>
         </Call>
+        
       </New>
     </Arg>
   </Call>
+  
+  
+    <!-- =========================================================== -->
+    <!-- Enable support for tlds in other bundles                    -->
+    <!-- =========================================================== -->
+    <Call name="setAttribute">
+          <Arg>org.eclipse.jetty.webapp.configuration</Arg>
+          <Arg>
+            <Array id="plusConfigOSGi" type="java.lang.String">
+              <Item>org.eclipse.jetty.webapp.WebInfConfiguration</Item>
+              <Item>org.eclipse.jetty.webapp.WebXmlConfiguration</Item>
+              <Item>org.eclipse.jetty.webapp.MetaInfConfiguration</Item>
+              <Item>org.eclipse.jetty.webapp.FragmentConfiguration</Item>
+              <Item>org.eclipse.jetty.webapp.JettyWebXmlConfiguration</Item>
+              <Item>org.eclipse.jetty.osgi.boot.jsp.TagLibOSGiConfiguration</Item>
+            </Array>
+          </Arg>
+    </Call>
 </Configure>

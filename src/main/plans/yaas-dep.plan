@@ -11,8 +11,14 @@
    
    -->
    
+   
+   
    <artifact type="bundle" name="slf4j.log4j12" version="1.6.1" />
    <artifact type="bundle" name="slf4j.api" version="1.6.1" />
+   
+   
+   
+   
    <artifact type="bundle" name="com.springsource.org.apache.tools.ant" version="1.7.0" />
    <artifact type="bundle" name="org.liquibase.osgi" version="3.2.0" />
    <artifact type="bundle" name="org.apache.servicemix.bundles.commons-beanutils" version="1.8.3.2" />

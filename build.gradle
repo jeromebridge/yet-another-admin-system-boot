@@ -1,4 +1,5 @@
 import org.apache.tools.ant.taskdefs.condition.Os
+import org.apache.tools.ant.filters.ReplaceTokens
 
 apply plugin: 'eclipse'
 apply plugin: 'java'
@@ -127,8 +128,9 @@ dependencies {
     compile "org.relaxng:com.springsource.org.relaxng.datatype:1.0.0"
     compile "org.javassist:javassist:3.17.1-GA"
     compile "commons-lang:commons-lang:2.6"
-    compile "org.ops4j.pax.logging:pax-logging-api:1.8.2"
-    compile "org.ops4j.pax.logging:pax-logging-service:1.8.2"
+    // compile "org.ops4j.pax.logging:pax-logging-api:1.8.2"
+    // compile "org.ops4j.pax.logging:pax-logging-service:1.8.2"
+    // compile "org.ops4j.pax.logging:pax-logging-logback:1.8.2"
     
     compile "org.slf4j:slf4j-api:1.6.1"
     compile "org.slf4j:slf4j-log4j12:1.6.1"
@@ -206,6 +208,11 @@ dependencies {
     pax_web "org.apache.xbean:xbean-finder:4.2"
     pax_web "org.ops4j.pax.web:pax-web-jetty:${paxWebVersion}"
     
+    pax_web "org.ops4j.pax.web:pax-web-pax-web-jsp:${paxWebVersion}"
+    pax_web "org.ops4j.pax.web:pax-web-extender-war:${paxWebVersion}"
+    pax_web "org.ops4j.pax.web:pax-web-extender-whiteboard:${paxWebVersion}"
+    
+    
     jetty_httpservice "org.eclipse.equinox:org.eclipse.equinox.http.servlet:1.1.400.v20130418"
     jetty_httpservice "org.eclipse.jetty.osgi:jetty-httpservice:${jettyVersion}"
     
@@ -258,6 +265,16 @@ dependencies {
     
     jetty "org.ops4j.pax.web:pax-web-jetty:${paxWebVersion}"
     
+    
+    jetty "org.ops4j.pax.web:pax-web-jsp:${paxWebVersion}" // Needs other dependencies
+    
+    
+    jetty "org.ops4j.pax.web:pax-web-extender-war:${paxWebVersion}"
+    jetty "org.ops4j.pax.web:pax-web-extender-whiteboard:${paxWebVersion}"
+    
+    // jetty "org.ops4j.pax.web:pax-web-jetty-bundle:${paxWebVersion}"
+    
+    
     jetty "commons-fileupload:commons-fileupload:1.3.1"
     jetty "org.everit.osgi.bundles:org.everit.osgi.bundles.javax.servlet.api:3.1.0" // Servlet API 2.7
 
@@ -279,10 +296,10 @@ dependencies {
     // osgi_tools_dep "org.slf4j:slf4j-api:1.7.5"
     osgi_tools_dep "com.springsource.util:com.springsource.util.osgi:2.0.5.RELEASE"
     osgi_tools_dep "org.eclipse.aether:aether-api:0.9.0.M2"
-    osgi_tools_dep "org.slf4j:jcl-over-slf4j:1.6.2"
+    // osgi_tools_dep "org.slf4j:jcl-over-slf4j:1.6.2"
     osgi_tools_dep "com.springsource.util:com.springsource.util.common:2.0.5.RELEASE"
-    osgi_tools_dep "ch.qos.logback:logback-core:1.0.7"
-    osgi_tools_dep "ch.qos.logback:logback-classic:1.0.7"
+    // osgi_tools_dep "ch.qos.logback:logback-core:1.0.7"
+    // osgi_tools_dep "ch.qos.logback:logback-classic:1.0.7"
     osgi_tools_dep  "commons-codec:commons-codec:1.10"
     
     osgi_tools "tools.osgi:osgi.analyzer:1.00.001-SNAPSHOT"
@@ -405,11 +422,6 @@ task installHttpService(dependsOn: [ 'downloadVirgo', 'upgradeJetty' ]) << {
 	               from( artifact.file )
 	           }
 	    }
-	    addSystemProperty( "jetty.etc.config.urls", "etc/jetty.xml,etc/jetty-deploy.xml,etc/jetty-annotations.xml,etc/jetty-plus.xml,etc/jetty-http.xml" );
-	    copy {
-            from "${projectDir}/src/main/config/jetty/etc"
-            into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/jetty/etc"
-        }
 	}
 }
 
@@ -445,6 +457,7 @@ task upgradeJetty(dependsOn: [ 'downloadVirgo' ]) << {
 	        )
 	    }
         
+        // Copy Pax Artifacts
         configurations.pax.resolvedConfiguration.resolvedArtifacts.each {
 	        artifact -> 
 	           project.copy {
@@ -452,6 +465,8 @@ task upgradeJetty(dependsOn: [ 'downloadVirgo' ]) << {
 	               from( artifact.file )
 	           }
 	    }
+	    
+	    // Copy Jetty Artifacts
 	    configurations.jetty.resolvedConfiguration.resolvedArtifacts.each {
 	        artifact -> 
 	           project.copy {
@@ -459,14 +474,27 @@ task upgradeJetty(dependsOn: [ 'downloadVirgo' ]) << {
 	               from( artifact.file )
 	           }
 	    }
+	    
+	    // Overwrite Jetty Web Plan
 	    copy {
             from "${projectDir}/src/main/plans/org.eclipse.virgo.jetty.web-3.5.0.RELEASE.plan"
             into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
         }
+        
+        // PAX Web Plan
         copy {
 	        from "${projectDir}/src/main/config/ext/org.ops4j.pax.web.properties"
 	        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
+	        filter(ReplaceTokens, tokens: [VIRGO_HOME: "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}".toString()])
 	    }
+	    
+	    // Setup Jetty Configuration
+	    //addSystemProperty( "java.naming.factory.initial", "org.eclipse.jetty.jndi.InitialContextFactory" );
+	    // addSystemProperty( "jetty.etc.config.urls", "etc/jetty.xml,etc/jetty-deploy.xml,etc/jetty-annotations.xml,etc/jetty-plus.xml,etc/jetty-http.xml" );
+        copy {
+            from "${projectDir}/src/main/config/jetty/etc"
+            into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/jetty/etc"
+        }
     }
 }
 
