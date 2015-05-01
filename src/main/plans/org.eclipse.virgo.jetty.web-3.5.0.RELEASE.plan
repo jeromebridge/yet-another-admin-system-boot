@@ -5,10 +5,11 @@
 				        http://www.eclipse.org/virgo/schema/plan 
 				        http://www.eclipse.org/virgo/schema/plan/eclipse-virgo-plan.xsd">
 		
-		
+		<!-- Servlet API -->
 		<artifact type="bundle" name="org.eclipse.jetty.osgi-servlet-api" version="[3.1,4.0)" />
 		<artifact type="bundle" name="org.everit.osgi.bundles.javax.servlet-api" version="[3.1,4.0)" />
         
+        <!-- Jetty -->
         <artifact type="bundle" name="org.eclipse.jetty.util" version="[9.0, 10.0)" />
         <artifact type="bundle" name="org.eclipse.jetty.io" version="[9.0, 10.0)" />
         <artifact type="bundle" name="org.eclipse.jetty.http" version="[9.0, 10.0)" />
@@ -36,6 +37,8 @@
         <artifact type="bundle" name="org.eclipse.jetty.osgi.boot" version="[9.0, 10.0)"/>
         -->
         
+        
+        <!-- PAX Web Configuration -->
         <artifact type="configuration" name="org.ops4j.pax.web" version="0" />
         
         <!--
@@ -62,6 +65,20 @@
         <artifact type="bundle" name="org.apache.xbean.bundleutils" version="[4.1, 5.0)" />
         <artifact type="bundle" name="org.apache.xbean.finder" version="[4.1, 5.0)" />
         <artifact type="bundle" name="org.ops4j.pax.web.pax-web-jetty" version="[4.0, 5.0)" />
+        
+        
+        <!-- JSP Support -->
+        <artifact type="bundle" name="javax.servlet.jsp-api" version="[2.3, 3.0)" />
+        <artifact type="bundle" name="javax.servlet.jsp.jstl-api" version="[1.2, 2.0)" />
+        <artifact type="bundle" name="com.springsource.org.apache.xml.resolver" version="[1.2, 2.0)" />
+        <artifact type="bundle" name="org.apache.servicemix.bundles.xerces" version="[2.11, 3.0)" />
+        <artifact type="bundle" name="org.apache.servicemix.bundles.bcel" version="[5.2, 6.0)" />
+        <artifact type="bundle" name="org.apache.servicemix.bundles.xalan" version="[2.7, 3.0)" />
+        <artifact type="bundle" name="org.apache.taglibs.standard-impl" version="[1.2, 2.0)" />
+        <artifact type="bundle" name="org.apache.taglibs.standard-jstlel" version="[1.2, 2.0)" />
+        <artifact type="bundle" name="com.github.akiraly.reusable-poms.tomcat-juli-over-slf4j" version="[4.0, 5.0)" />
+        <artifact type="bundle" name="org.ops4j.pax.web.pax-web-jsp" version="[4.0, 5.0)" />
+        
         
         <artifact type="bundle" name="org.ops4j.pax.web.pax-web-extender-war" version="[4.0, 5.0)" />
         <artifact type="bundle" name="org.ops4j.pax.web.pax-web-extender-whiteboard" version="[4.0, 5.0)" />

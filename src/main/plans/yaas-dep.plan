@@ -13,8 +13,8 @@
    
    
    
-   <artifact type="bundle" name="slf4j.log4j12" version="1.6.1" />
-   <artifact type="bundle" name="slf4j.api" version="1.6.1" />
+   <artifact type="bundle" name="slf4j.log4j12" version="[1.7, 1.8)" />
+   <artifact type="bundle" name="slf4j.api" version="[1.7, 1.8)" />
    
    
    
