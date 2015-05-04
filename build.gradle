@@ -6,7 +6,7 @@ apply plugin: 'java'
 apply plugin: UpdatePropertiesPlugin
 
 ext {
-    virgoArtifactId = "virgo-tomcat-server"
+    virgoArtifactId = "virgo-jetty-server"
     virgoVersion = "3.6.3.RELEASE"
     springVersion = "3.2.11.RELEASE"
     aspectjVersion = "1.7.1"
@@ -29,6 +29,7 @@ ext {
     poiVersion = "3.11"
     h2Version = "1.4.186"
     jettyVersion = "9.2.11.M0"
+    jettyUpgradeVersion = "8.1.3.v20120416"
 
     yaasVersion = "1.0.0.M1"
 
@@ -45,6 +46,9 @@ configurations {
         transitive = false
     }
     pax_web {
+        transitive = false
+    }
+    felix_web_console {
         transitive = false
     }
     jetty_httpservice
@@ -321,7 +325,9 @@ dependencies {
     jetty "org.everit.osgi.bundles:org.everit.osgi.bundles.javax.servlet.api:3.1.0" // Servlet API 2.7
 
 
-    jetty_upgrade "org.everit.osgi.bundles:org.everit.osgi.bundles.javax.servlet.api:3.1.0" // Servlet API 2.7
+    jetty_upgrade "org.everit.osgi.bundles:org.everit.osgi.bundles.javax.servlet.api:3.1.0" // Servlet API 2.7 & 3.1
+    jetty_upgrade "org.eclipse.equinox:org.eclipse.equinox.http.servlet:1.1.400.v20130418"
+    jetty_upgrade "org.eclipse.jetty.osgi:jetty-httpservice:${jettyUpgradeVersion}"
 
     aspectj "org.aspectj:com.springsource.org.aspectj.weaver:${aspectjVersion}.RELEASE"
     

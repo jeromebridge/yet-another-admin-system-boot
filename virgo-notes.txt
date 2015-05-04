@@ -86,13 +86,18 @@ import com.yaas.commons.api.bundle.provider.registry.IBundleProviderRegistry
 import com.yaas.rate.api.IRateTableRegistry
 
 out.println ("Hello world!!");
-
 def httpService = osgi.getService(org.osgi.service.http.HttpService.class)
 out.println( httpService );
+osgi.getServices( IBundleProviderRegistry.class, null ).each{
+  // println it.id + " " + it.overrideContext
+}
 
-def eventPlugin = osgi.getServices(javax.servlet.Servlet.class,'(felix.webconsole.label=events)')[0]
+def srv = osgi.getService( IRateTableRegistry.class )
+srv.getRateTables().each {
+  println it.id
+}
 
-def srv2 = osgi.getService( com.yaas.commons.internal.bundle.provider.BundleProviderContext.class );
+/*
 
 osgi.getServices( IBundleProviderContext.class, null ).each{
   println it
@@ -108,6 +113,7 @@ srv.getRateTables().each {
 }
 
 out.println( src );
+*/
 
 
 
