@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan name="felix-web-console.plan" version="1.0.0" scoped="false" atomic="false" provisioning="auto" xmlns="http://www.eclipse.org/virgo/schema/plan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eclipse.org/virgo/schema/plan http://www.eclipse.org/virgo/schema/plan/eclipse-virgo-plan.xsd">
+    
+    <artifact type="bundle" name="org.apache.felix.webconsole" version="[4.2,5.0)" />
+    <artifact type="bundle" name="org.apache.felix.webconsole.plugins.scriptconsole" version="[1.0, 2.0)" />
+    <artifact type="bundle" name="groovy-all" version="[2.4, 3.0)" />
+
+</plan>

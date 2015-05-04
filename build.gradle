@@ -329,6 +329,11 @@ dependencies {
     jetty_upgrade "org.eclipse.equinox:org.eclipse.equinox.http.servlet:1.1.400.v20130418"
     jetty_upgrade "org.eclipse.jetty.osgi:jetty-httpservice:${jettyUpgradeVersion}"
 
+
+    felix_web_console "org.apache.felix:org.apache.felix.webconsole:4.2.8"
+    felix_web_console "org.apache.felix:org.apache.felix.webconsole.plugins.scriptconsole:1.0.0"
+    felix_web_console "org.codehaus.groovy:groovy-all:2.4.3"
+
     aspectj "org.aspectj:com.springsource.org.aspectj.weaver:${aspectjVersion}.RELEASE"
     
     osgi_tools_dep "org.apache.commons:commons-lang3:${commonsLang3Version}"
@@ -358,7 +363,7 @@ dependencies {
 
 task setupVirgoQuick( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'upgradeSpringAndAspectJ', 'updateVirgoSettings', 'removeVirgoSplash' ] ) {}
 
-task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeJetty2', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'removeVirgoSplash', 'installPickupBundles', 'installYaasDep' ] ) {}
+task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeJetty2', 'installFelixWebConsole', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'removeVirgoSplash', 'installPickupBundles', 'installYaasDep' ] ) {}
 
 task setupVirgo( dependsOn: [ 'setupVirgoNoYaas', 'installYaas' ] ) {}
 
@@ -486,6 +491,25 @@ task installEclipseJtd(dependsOn: [ 'downloadVirgo' ]) << {
            addPluginToBundleList( artifact.file )
     }
     
+}
+
+task installFelixWebConsole(dependsOn: [ 'downloadVirgo' ]) << {
+    if( isJettyVirgo() ) {
+        // Copy Plan
+        copy {
+            from "${projectDir}/src/main/plans/felix-web-console.plan"
+            into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
+        }
+        
+        // Copy Artifacts
+        configurations.felix_web_console.resolvedConfiguration.resolvedArtifacts.each {
+            artifact -> 
+               project.copy {
+                   into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr" ) 
+                   from( artifact.file )
+               }
+        }
+    }
 }
 
 task upgradeJetty2(dependsOn: [ 'downloadVirgo' ]) << {

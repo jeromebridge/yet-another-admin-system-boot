@@ -19,7 +19,7 @@ install -start mvn:org.ops4j.pax.web/pax-web-spi/3.2.1
 install -start mvn:org.ops4j.pax.web/pax-web-runtime/3.2.1
 // install -start mvn:org.ops4j.pax.web/pax-web-jsp/3.2.1
 // install -start mvn:org.ops4j.pax.web/pax-web-tomcat/3.2.1
-  
+
 // PAX WEB -- ADDITIONAL
 install -start mvn:org.ops4j.pax.web/pax-web-jsp/3.2.1
 install -start mvn:org.ow2.asm/asm/5.0.3
