@@ -80,10 +80,13 @@
         <artifact type="bundle" name="org.ops4j.pax.web.pax-web-jsp" version="[4.0, 5.0)" />
         
         
+        <artifact type="bundle" name="org.eclipse.virgo.web.dm" version="[3.1, 4.0)"/>
+        
+        
+        <!-- We have to use Spring DM web extender to get support for Spring in the web application -->
+        
         <artifact type="bundle" name="org.ops4j.pax.web.pax-web-extender-war" version="[4.0, 5.0)" />
         <artifact type="bundle" name="org.ops4j.pax.web.pax-web-extender-whiteboard" version="[4.0, 5.0)" />
-        
-        
-        <artifact type="bundle" name="org.eclipse.virgo.web.dm" version="[3.1, 4.0)"/>
+
 
 </plan>

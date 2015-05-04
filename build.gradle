@@ -41,13 +41,20 @@ configurations {
     virgo
     spring
     aspectj
-    pax
-    pax_web
+    pax {
+        transitive = false
+    }
+    pax_web {
+        transitive = false
+    }
     jetty_httpservice
     eclipse_jdt {
         transitive = false
     }
     jetty {
+        transitive = false
+    }
+    jetty_upgrade {
         transitive = false
     }
     yaas { 
@@ -57,7 +64,9 @@ configurations {
 	        cacheChangingModulesFor 0, "seconds"
 	    }
     }
-    osgi_tools_dep
+    osgi_tools_dep {
+        transitive = false
+    }
     osgi_tools {
         transitive = false
         resolutionStrategy {
@@ -74,12 +83,16 @@ repositories {
     mavenCentral()
     maven { url "http://repo.pennassurancesoftware.com/artifactory/public/" }
     maven { url "http://repo.pennassurancesoftware.com/artifactory/public-snapshots/" }
+    mavenLocal()
 }
 
 dependencies {
     compile "javax.persistence:com.springsource.javax.persistence:2.0.0"
     compile "org.apache.velocity:com.springsource.org.apache.velocity.tools.view:1.4.0"
     compile "org.dom4j:com.springsource.org.dom4j:1.6.1"
+    // compile "org.glassfish.web:javax.el:2.2.1"
+    compile "javax.el:javax.el-api:2.2.1"
+    // compile "javax.faces:javax.faces-api:2.1"
     compile "org.glassfish:javax.faces:2.1.2"
     compile "javax.inject:javax.inject:1"
     compile "javax.interceptor:javax.interceptor-api:1.2"
@@ -106,7 +119,7 @@ dependencies {
     compile "org.eclipse.persistence:org.eclipse.persistence.asm:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.antlr:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.moxy:${eclipselinkVersion}"
-    compile "org.eclipse.virgo.mirrored:org.glassfish.com.sun.faces:2.1.18.v201304210537:virgo"
+    // compile "org.eclipse.virgo.mirrored:org.glassfish.com.sun.faces:2.1.18.v201304210537:virgo"
     // compile "org.restlet.osgi:org.restlet:${restletVersion}"
     // compile "org.restlet.osgi:org.restlet.ext.servlet:${restletVersion}"
     // compile "org.restlet.osgi:org.restlet.ext.xml:${restletVersion}"
@@ -188,7 +201,7 @@ dependencies {
     spring "org.apache.servicemix.bundles:org.apache.servicemix.bundles.spring-webmvc-portlet:${springVersion}_2"
     
     pax "org.ops4j.base:ops4j-base-lang:${ops4jVersion}"
-    pax "org.ops4j.base:ops4j-base-monitors:$ops4jVersion}"
+    pax "org.ops4j.base:ops4j-base-monitors:${ops4jVersion}"
     pax "org.ops4j.base:ops4j-base-io:${ops4jVersion}"
     pax "org.codehaus.jackson:jackson-core-asl:1.9.13"
     pax "org.ops4j.pax.swissbox:pax-swissbox-core:${paxSwissboxVersion}"
@@ -308,6 +321,8 @@ dependencies {
     jetty "org.everit.osgi.bundles:org.everit.osgi.bundles.javax.servlet.api:3.1.0" // Servlet API 2.7
 
 
+    jetty_upgrade "org.everit.osgi.bundles:org.everit.osgi.bundles.javax.servlet.api:3.1.0" // Servlet API 2.7
+
     aspectj "org.aspectj:com.springsource.org.aspectj.weaver:${aspectjVersion}.RELEASE"
     
     osgi_tools_dep "org.apache.commons:commons-lang3:${commonsLang3Version}"
@@ -337,7 +352,7 @@ dependencies {
 
 task setupVirgoQuick( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'upgradeSpringAndAspectJ', 'updateVirgoSettings', 'removeVirgoSplash' ] ) {}
 
-task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeJetty', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'removeVirgoSplash', 'installPickupBundles', 'installYaasDep' ] ) {}
+task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeJetty2', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'removeVirgoSplash', 'installPickupBundles', 'installYaasDep' ] ) {}
 
 task setupVirgo( dependsOn: [ 'setupVirgoNoYaas', 'installYaas' ] ) {}
 
@@ -467,6 +482,25 @@ task installEclipseJtd(dependsOn: [ 'downloadVirgo' ]) << {
     
 }
 
+task upgradeJetty2(dependsOn: [ 'downloadVirgo' ]) << {
+    if( isJettyVirgo() ) {
+        // Copy Jetty Upgrade Artifacts
+        configurations.jetty_upgrade.resolvedConfiguration.resolvedArtifacts.each {
+            artifact -> 
+               project.copy {
+                   into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ) 
+                   from( artifact.file )
+               }
+        }
+        
+        // Overwrite Jetty Web Plan
+        copy {
+            from "${projectDir}/src/main/upgrade/jetty/plans/org.eclipse.virgo.jetty.web-3.5.0.RELEASE.plan"
+            into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
+        }
+    }
+}
+
 task upgradeJetty(dependsOn: [ 'downloadVirgo', 'installEclipseJtd' ]) << {
     if( isJettyVirgo() ) {
         // Remove Jetty Jars
@@ -523,13 +557,7 @@ task upgradeJetty(dependsOn: [ 'downloadVirgo', 'installEclipseJtd' ]) << {
             into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
         }
         
-        // Overwrite Kernel User Region
-        copy {
-            from "${projectDir}/src/main/plans/org.eclipse.virgo.kernel.userregion.blueprint.plan"
-            into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
-        }
-        
-        // PAX Web Plan
+        // PAX Web Properties
         copy {
 	        from "${projectDir}/src/main/config/ext/org.ops4j.pax.web.properties"
 	        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"

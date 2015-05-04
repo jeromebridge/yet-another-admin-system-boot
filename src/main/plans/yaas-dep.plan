@@ -17,6 +17,10 @@
    <artifact type="bundle" name="slf4j.api" version="[1.7, 1.8)" />
    
    
+   <artifact type="bundle" name="javax.el-api" version="2.2.1" />
+   <!-- <artifact type="bundle" name="javax.faces-api" version="(2.1,3.0]" /> -->
+   <!-- <artifact type="bundle" name="org.glassfish.javax.faces" version="(2.1,3.0]" /> -->
+   <artifact type="bundle" name="org.glassfish.com.sun.faces" version="(2.1,3.0]" />
    
    
    <artifact type="bundle" name="com.springsource.org.apache.tools.ant" version="1.7.0" />
