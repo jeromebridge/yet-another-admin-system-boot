@@ -45,17 +45,13 @@ configurations {
     pax {
         transitive = false
     }
-    pax_web {
-        transitive = false
-    }
     felix_web_console {
         transitive = false
     }
-    jetty_httpservice
     eclipse_jdt {
         transitive = false
     }
-    jetty {
+    pax_web_jetty {
         transitive = false
     }
     jetty_upgrade {
@@ -221,24 +217,9 @@ dependencies {
     pax "org.apache.felix:org.apache.felix.bundlerepository:2.0.2"
     pax "org.ops4j.pax.url:pax-url-obr:${paxUrlVersion}"
     
-    pax_web "org.ops4j.pax.web:pax-web-api:${paxWebVersion}"
-    pax_web "org.ops4j.pax.web:pax-web-spi:${paxWebVersion}"
-    pax_web "org.ops4j.pax.web:pax-web-runtime:${paxWebVersion}"
-    
-    pax_web "org.apache.xbean:xbean-finder:4.2"
-    pax_web "org.ops4j.pax.web:pax-web-jetty:${paxWebVersion}"
-    
-    pax_web "org.ops4j.pax.web:pax-web-jsp:${paxWebVersion}"
-    pax_web "org.ops4j.pax.web:pax-web-extender-war:${paxWebVersion}"
-    pax_web "org.ops4j.pax.web:pax-web-extender-whiteboard:${paxWebVersion}"
-    
-    
-    jetty_httpservice "org.eclipse.equinox:org.eclipse.equinox.http.servlet:1.1.400.v20130418"
-    jetty_httpservice "org.eclipse.jetty.osgi:jetty-httpservice:${jettyVersion}"
-    
-    // jetty "javax.servlet:javax.servlet-api:3.0.1"
-    // jetty "org.eclipse.jetty.toolchain:jetty-osgi-servlet-api:3.1.0.M3"
-    // jetty "org.eclipse.equinox:org.eclipse.equinox.http.servlet:1.1.400.v20130418"
+    // pax_web_jetty "javax.servlet:javax.servlet-api:3.0.1"
+    // pax_web_jetty "org.eclipse.jetty.toolchain:jetty-osgi-servlet-api:3.1.0.M3"
+    // pax_web_jetty "org.eclipse.equinox:org.eclipse.equinox.http.servlet:1.1.400.v20130418"
     
     // Eclipse JDT needed for JSP support in Jetty
     eclipse_jdt "org.eclipse.equinox:org.eclipse.equinox.preferences:3.4.1"
@@ -254,75 +235,76 @@ dependencies {
     eclipse_jdt "org.eclipse.birt.runtime:com.ibm.icu:52.1.1.v201501240615"
     eclipse_jdt "org.eclipse.text:org.eclipse.text:3.5.101"
     eclipse_jdt "org.eclipse.jdt:org.eclipse.jdt.core:3.10.0"
+
     
-    jetty "org.ow2.asm:asm:5.0.1"
-    jetty "org.ow2.asm:asm-commons:5.0.1"
-    jetty "org.ow2.asm:asm-tree:5.0.1"
-    jetty "org.apache.aries:org.apache.aries.util:1.1.0"
-    jetty "org.apache.aries.spifly:org.apache.aries.spifly.dynamic.bundle:1.0.2"
-    jetty "javax.annotation:javax.annotation-api:1.2"
-    
-    
-    jetty "org.eclipse.jetty:jetty-annotations:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-client:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-cdi:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-continuation:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-deploy:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-http:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-io:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-jmx:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-jndi:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-plus:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-rewrite:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-security:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-server:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-servlet:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-servlets:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-util:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
-    jetty "org.eclipse.jetty:jetty-xml:${jettyVersion}"
-    jetty "org.eclipse.jetty.toolchain:jetty-osgi-servlet-api:3.1.0.M3"
+    pax_web_jetty "org.ow2.asm:asm:5.0.1"
+    pax_web_jetty "org.ow2.asm:asm-commons:5.0.1"
+    pax_web_jetty "org.ow2.asm:asm-tree:5.0.1"
+    pax_web_jetty "org.apache.aries:org.apache.aries.util:1.1.0"
+    pax_web_jetty "org.apache.aries.spifly:org.apache.aries.spifly.dynamic.bundle:1.0.2"
+    pax_web_jetty "javax.annotation:javax.annotation-api:1.2"
     
     
-    jetty "org.eclipse.jetty.osgi:jetty-httpservice:${jettyVersion}"
-    jetty "org.eclipse.jetty.osgi:jetty-osgi-boot:${jettyVersion}"
-    jetty "org.eclipse.jetty.osgi:jetty-osgi-boot-jsp:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-annotations:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-client:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-cdi:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-continuation:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-deploy:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-http:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-io:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-jmx:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-jndi:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-plus:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-rewrite:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-security:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-server:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-servlet:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-servlets:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-util:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty:jetty-xml:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty.toolchain:jetty-osgi-servlet-api:3.1.0.M3"
     
-    jetty "org.eclipse.jetty.websocket:websocket-servlet:9.3.0.M2"
+    
+    pax_web_jetty "org.eclipse.jetty.osgi:jetty-httpservice:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty.osgi:jetty-osgi-boot:${jettyVersion}"
+    pax_web_jetty "org.eclipse.jetty.osgi:jetty-osgi-boot-jsp:${jettyVersion}"
+    
+    pax_web_jetty "org.eclipse.jetty.websocket:websocket-servlet:9.3.0.M2"
     
     
-    jetty "org.ops4j.pax.web:pax-web-api:${paxWebVersion}"
-    jetty "org.ops4j.pax.web:pax-web-spi:${paxWebVersion}"
-    jetty "org.ops4j.pax.web:pax-web-runtime:${paxWebVersion}"
+    pax_web_jetty "org.ops4j.pax.web:pax-web-api:${paxWebVersion}"
+    pax_web_jetty "org.ops4j.pax.web:pax-web-spi:${paxWebVersion}"
+    pax_web_jetty "org.ops4j.pax.web:pax-web-runtime:${paxWebVersion}"
     
-    jetty "org.apache.xbean:xbean-bundleutils:4.2"
-    jetty "org.apache.xbean:xbean-finder:4.2"
+    pax_web_jetty "org.apache.xbean:xbean-bundleutils:4.2"
+    pax_web_jetty "org.apache.xbean:xbean-finder:4.2"
     
-    jetty "org.ops4j.pax.web:pax-web-jetty:${paxWebVersion}"
+    pax_web_jetty "org.ops4j.pax.web:pax-web-jetty:${paxWebVersion}"
     
     
     
     // Jetty JSP Support
-    jetty "javax.servlet.jsp:javax.servlet.jsp-api:2.3.2-b01"
-    jetty "javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:1.2.1"
-    jetty "org.apache.xml:com.springsource.org.apache.xml.resolver:1.2.0"
-    jetty "org.apache.servicemix.bundles:org.apache.servicemix.bundles.xerces:2.11.0_1"
-    jetty "org.apache.servicemix.bundles:org.apache.servicemix.bundles.bcel:5.2_4"
-    jetty "org.apache.servicemix.bundles:org.apache.servicemix.bundles.xalan:2.7.2_2"
-    jetty "org.apache.taglibs:taglibs-standard-impl:1.2.5"
-    jetty "org.apache.taglibs:taglibs-standard-jstlel:1.2.5"
-    jetty "com.github.akiraly.reusable-poms:tomcat-juli-over-slf4j:4"
-    jetty "org.ops4j.pax.web:pax-web-jsp:${paxWebVersion}"
+    pax_web_jetty "javax.servlet.jsp:javax.servlet.jsp-api:2.3.2-b01"
+    pax_web_jetty "javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:1.2.1"
+    pax_web_jetty "org.apache.xml:com.springsource.org.apache.xml.resolver:1.2.0"
+    pax_web_jetty "org.apache.servicemix.bundles:org.apache.servicemix.bundles.xerces:2.11.0_1"
+    pax_web_jetty "org.apache.servicemix.bundles:org.apache.servicemix.bundles.bcel:5.2_4"
+    pax_web_jetty "org.apache.servicemix.bundles:org.apache.servicemix.bundles.xalan:2.7.2_2"
+    pax_web_jetty "org.apache.taglibs:taglibs-standard-impl:1.2.5"
+    pax_web_jetty "org.apache.taglibs:taglibs-standard-jstlel:1.2.5"
+    pax_web_jetty "com.github.akiraly.reusable-poms:tomcat-juli-over-slf4j:4"
+    pax_web_jetty "org.ops4j.pax.web:pax-web-jsp:${paxWebVersion}"
     
     
-    jetty "org.ops4j.pax.web:pax-web-extender-war:${paxWebVersion}"
-    jetty "org.ops4j.pax.web:pax-web-extender-whiteboard:${paxWebVersion}"
+    pax_web_jetty "org.ops4j.pax.web:pax-web-extender-war:${paxWebVersion}"
+    pax_web_jetty "org.ops4j.pax.web:pax-web-extender-whiteboard:${paxWebVersion}"
     
-    // jetty "org.ops4j.pax.web:pax-web-jetty-bundle:${paxWebVersion}"
+    // pax_web_jetty "org.ops4j.pax.web:pax-web-jetty-bundle:${paxWebVersion}"
     
     
-    jetty "commons-fileupload:commons-fileupload:1.3.1"
-    jetty "org.everit.osgi.bundles:org.everit.osgi.bundles.javax.servlet.api:3.1.0" // Servlet API 2.7
+    pax_web_jetty "commons-fileupload:commons-fileupload:1.3.1"
+    pax_web_jetty "org.everit.osgi.bundles:org.everit.osgi.bundles.javax.servlet.api:3.1.0" // Servlet API 2.7
 
 
     jetty_upgrade "org.everit.osgi.bundles:org.everit.osgi.bundles.javax.servlet.api:3.1.0" // Servlet API 2.7 & 3.1
@@ -363,7 +345,7 @@ dependencies {
 
 task setupVirgoQuick( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'upgradeSpringAndAspectJ', 'updateVirgoSettings', 'removeVirgoSplash' ] ) {}
 
-task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeJetty2', 'installFelixWebConsole', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'removeVirgoSplash', 'installPickupBundles', 'installYaasDep' ] ) {}
+task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeJetty', 'installFelixWebConsole', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'removeVirgoSplash', 'installPickupBundles', 'installYaasDep' ] ) {}
 
 task setupVirgo( dependsOn: [ 'setupVirgoNoYaas', 'installYaas' ] ) {}
 
@@ -423,24 +405,6 @@ task installPaxUrl(dependsOn: [ 'downloadVirgo' ]) << {
     }
 }
 
-task installPaxWeb(dependsOn: [ 'downloadVirgo' ]) << {
-    configurations.pax_web.resolvedConfiguration.resolvedArtifacts.each {
-        artifact -> 
-           project.copy {
-               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ) 
-               from( artifact.file )
-           }
-    }
-    copy {
-        from "${projectDir}/src/main/config/ext"
-        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
-    }
-    copy {
-        from "${projectDir}/src/main/plans/pax-web.plan"
-        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
-    }
-}
-
 task installOsgiTools(dependsOn: [ 'downloadVirgo' ]) << {
     copy {
         from "${projectDir}/src/main/plans/osgi-tools.plan"
@@ -462,22 +426,6 @@ task installOsgiTools(dependsOn: [ 'downloadVirgo' ]) << {
                from( artifact.file )
            }
     }
-}
-
-task installHttpService(dependsOn: [ 'downloadVirgo', 'upgradeJetty' ]) << {
-    if( isJettyVirgo() ) {
-	    copy {
-	        from "${projectDir}/src/main/plans/jetty-httpservice.plan"
-	        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
-	    }
-	    configurations.jetty_httpservice.resolvedConfiguration.resolvedArtifacts.each {
-	        artifact -> 
-	           project.copy {
-	               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ) 
-	               from( artifact.file )
-	           }
-	    }
-	}
 }
 
 task installEclipseJtd(dependsOn: [ 'downloadVirgo' ]) << {
@@ -512,7 +460,7 @@ task installFelixWebConsole(dependsOn: [ 'downloadVirgo' ]) << {
     }
 }
 
-task upgradeJetty2(dependsOn: [ 'downloadVirgo' ]) << {
+task upgradeJetty(dependsOn: [ 'downloadVirgo' ]) << {
     if( isJettyVirgo() ) {
         // Copy Jetty Upgrade Artifacts
         configurations.jetty_upgrade.resolvedConfiguration.resolvedArtifacts.each {
@@ -531,7 +479,7 @@ task upgradeJetty2(dependsOn: [ 'downloadVirgo' ]) << {
     }
 }
 
-task upgradeJetty(dependsOn: [ 'downloadVirgo', 'installEclipseJtd' ]) << {
+task upgradeToPaxWeb(dependsOn: [ 'downloadVirgo', 'installEclipseJtd' ]) << {
     if( isJettyVirgo() ) {
         // Remove Jetty Jars
         ant.delete( includeEmptyDirs: 'true' ) {
@@ -573,7 +521,7 @@ task upgradeJetty(dependsOn: [ 'downloadVirgo', 'installEclipseJtd' ]) << {
 	    }
 	    
 	    // Copy Jetty Artifacts
-	    configurations.jetty.resolvedConfiguration.resolvedArtifacts.each {
+	    configurations.pax_web_jetty.resolvedConfiguration.resolvedArtifacts.each {
 	        artifact -> 
 	           project.copy {
 	               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext" ) 
@@ -583,13 +531,13 @@ task upgradeJetty(dependsOn: [ 'downloadVirgo', 'installEclipseJtd' ]) << {
 	    
 	    // Overwrite Jetty Web Plan
 	    copy {
-            from "${projectDir}/src/main/plans/org.eclipse.virgo.jetty.web-3.5.0.RELEASE.plan"
+            from "${projectDir}/src/main/upgrade/pax-web/plans/org.eclipse.virgo.jetty.web-3.5.0.RELEASE.plan"
             into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
         }
         
         // PAX Web Properties
         copy {
-	        from "${projectDir}/src/main/config/ext/org.ops4j.pax.web.properties"
+	        from "${projectDir}/src/main/upgrade/pax-web/config/ext/org.ops4j.pax.web.properties"
 	        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
 	        filter(ReplaceTokens, tokens: [VIRGO_HOME: "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}".toString()])
 	    }
@@ -598,7 +546,7 @@ task upgradeJetty(dependsOn: [ 'downloadVirgo', 'installEclipseJtd' ]) << {
 	    // addSystemProperty( "java.naming.factory.initial", "org.eclipse.jetty.jndi.InitialContextFactory" );
 	    // addSystemProperty( "jetty.etc.config.urls", "etc/jetty.xml,etc/jetty-deploy.xml,etc/jetty-annotations.xml,etc/jetty-plus.xml,etc/jetty-http.xml" );
         copy {
-            from "${projectDir}/src/main/config/jetty/etc"
+            from "${projectDir}/src/main/upgrade/pax-web/config/jetty/etc"
             into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/jetty/etc"
         }
     }
