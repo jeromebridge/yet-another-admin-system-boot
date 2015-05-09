@@ -39,6 +39,9 @@ configurations {
     compile {
         transitive = false
     }
+    compile_no_plan {
+        transitive = false
+    }
     virgo
     spring
     aspectj
@@ -64,7 +67,25 @@ configurations {
 	        cacheChangingModulesFor 0, "seconds"
 	    }
     }
+    
+    yaas_pom {
+        transitive = false
+        resolutionStrategy {
+            cacheDynamicVersionsFor 0, "seconds"
+            cacheChangingModulesFor 0, "seconds"
+        }
+    }
+    yaas2 {
+        transitive = false
+        resolutionStrategy {
+            cacheDynamicVersionsFor 0, "seconds"
+            cacheChangingModulesFor 0, "seconds"
+        }
+    }
     osgi_tools_dep {
+        transitive = false
+    }
+    osgi_tools_dep_no_plan {
         transitive = false
     }
     osgi_tools {
@@ -83,104 +104,103 @@ repositories {
     mavenCentral()
     maven { url "http://repo.pennassurancesoftware.com/artifactory/public/" }
     maven { url "http://repo.pennassurancesoftware.com/artifactory/public-snapshots/" }
-    mavenLocal()
+    // mavenLocal()
 }
 
 dependencies {
-    compile "javax.persistence:com.springsource.javax.persistence:2.0.0"
-    compile "org.apache.velocity:com.springsource.org.apache.velocity.tools.view:1.4.0"
-    compile "org.dom4j:com.springsource.org.dom4j:1.6.1"
-    // compile "org.glassfish.web:javax.el:2.2.1"
+    // Order these in the order they should be installed into OSGi container
+    compile "org.slf4j:slf4j-log4j12:1.7.2"
+    compile "org.slf4j:slf4j-api:1.7.2"
     compile "javax.el:javax.el-api:2.2.1"
-    // compile "javax.faces:javax.faces-api:2.1"
     compile "org.glassfish:javax.faces:2.1.2"
-    compile "javax.inject:javax.inject:1"
-    compile "javax.interceptor:javax.interceptor-api:1.2"
-    compile "javax.transaction:javax.transaction-api:1.2"
-    compile "javax.ws.rs:jsr311-api:1.1.1"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.cglib:3.1_1"
+    compile "org.apache.ant:com.springsource.org.apache.tools.ant:1.7.0"
+    compile "org.liquibase:liquibase-osgi:${liquibaseVersion}"
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-beanutils:1.8.3_2"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-collections:3.2.1_3"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-dbcp:1.4_3"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-digester:1.8_4"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-jxpath:1.3_1"
-    // compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-lang:2.4_6"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-pool:1.5.4_4"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.guava:11.0.2_2"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.jaxb-impl:2.2.10_1"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.oro:2.0.8_6"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.reflections:0.9.8_1"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.velocity:1.7_3"
     compile "com.pennassurancesoftware.bundles:org.apache.poi-osgi:${poiVersion}"
+    compile "javax.ws.rs:jsr311-api:1.1.1"
+    compile "commons-lang:commons-lang:2.6"
+    compile "org.json:com.springsource.org.json:1.0.0"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-jxpath:1.3_1"
+    compile "org.aspectj:com.springsource.org.aspectj.weaver:${aspectjVersion}.RELEASE"
+    compile "org.relaxng:com.springsource.org.relaxng.datatype:1.0.0"
+    compile "org.dom4j:com.springsource.org.dom4j:1.6.1"
+    compile "org.jaxen:com.springsource.org.jaxen:1.1.1"
+    compile "org.eclipse.persistence:org.eclipse.persistence.moxy:${eclipselinkVersion}"
+    compile "org.javassist:javassist:3.17.1-GA"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.reflections:0.9.8_1"
+    compile "com.atomikos:transactions-osgi:3.9.3"
+    compile "org.postgresql:com.springsource.org.postgresql.jdbc4:${postgresqlJdbc4Version}"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.guava:11.0.2_2"
+    compile "com.h2database:h2:${h2Version}"
+    compile "org.junit:com.springsource.org.junit:${junitVersion}"
+    compile "commons-io:commons-io:${commonsIoVersion}"
     compile "org.eclipse.persistence:javax.persistence:${jpaVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.core:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.jpa:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.jpa.jpql:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.asm:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.antlr:${eclipselinkVersion}"
-    compile "org.eclipse.persistence:org.eclipse.persistence.moxy:${eclipselinkVersion}"
-    // compile "org.eclipse.virgo.mirrored:org.glassfish.com.sun.faces:2.1.18.v201304210537:virgo"
-    // compile "org.restlet.osgi:org.restlet:${restletVersion}"
-    // compile "org.restlet.osgi:org.restlet.ext.servlet:${restletVersion}"
-    // compile "org.restlet.osgi:org.restlet.ext.xml:${restletVersion}"
-    // compile "org.restlet.osgi:org.restlet.ext.jaxrs:${restletVersion}"
-    // compile "org.restlet.osgi:org.restlet.ext.osgi:${restletVersion}"
-    // compile "org.restlet.osgi:org.restlet.ext.jaxb:${restletVersion}"
-    compile "org.testng:testng:6.5.2"
-    compile "com.atomikos:transactions-osgi:3.9.3"
-    compile "javax.enterprise:cdi-api:${cdiVersion}"
-    compile "commons-io:commons-io:${commonsIoVersion}"
-    compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
-    compile "org.apache.xmlbeans:com.springsource.org.apache.xmlbeans:${xmlbeansVersion}"
-    compile "org.junit:com.springsource.org.junit:${junitVersion}"
-    compile "org.postgresql:com.springsource.org.postgresql.jdbc4:${postgresqlJdbc4Version}"
-    compile "javax.xml.bind:jaxb-api:${jaxbVersion}"
-    compile "org.liquibase:liquibase-osgi:${liquibaseVersion}"
-    compile "commons-codec:commons-codec:1.5"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.spring-aspects:${springVersion}_2"
     
-    compile "org.json:com.springsource.org.json:1.0.0"
-    compile "org.apache.ant:com.springsource.org.apache.tools.ant:1.7.0"
-    compile "org.jaxen:com.springsource.org.jaxen:1.1.1"
-    compile "org.relaxng:com.springsource.org.relaxng.datatype:1.0.0"
-    compile "org.javassist:javassist:3.17.1-GA"
-    compile "commons-lang:commons-lang:2.6"
-    // compile "org.ops4j.pax.logging:pax-logging-api:1.8.2"
-    // compile "org.ops4j.pax.logging:pax-logging-service:1.8.2"
-    // compile "org.ops4j.pax.logging:pax-logging-logback:1.8.2"
+
+    compile_no_plan "javax.persistence:com.springsource.javax.persistence:2.0.0"
+    compile_no_plan "org.apache.velocity:com.springsource.org.apache.velocity.tools.view:1.4.0"
+    // // compile "org.glassfish.web:javax.el:2.2.1"
+    // // compile "javax.faces:javax.faces-api:2.1"
+    compile_no_plan "javax.interceptor:javax.interceptor-api:1.2"
+    compile_no_plan "javax.transaction:javax.transaction-api:1.2"
+    compile_no_plan "org.apache.servicemix.bundles:org.apache.servicemix.bundles.cglib:3.1_1"
+    compile_no_plan "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-collections:3.2.1_3"
+    compile_no_plan "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-dbcp:1.4_3"
+    compile_no_plan "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-digester:1.8_4"
+    // // compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-lang:2.4_6"
+    compile_no_plan "org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-pool:1.5.4_4"
+    compile_no_plan "org.apache.servicemix.bundles:org.apache.servicemix.bundles.jaxb-impl:2.2.10_1"
+    compile_no_plan "org.apache.servicemix.bundles:org.apache.servicemix.bundles.oro:2.0.8_6"
+    compile_no_plan "org.apache.servicemix.bundles:org.apache.servicemix.bundles.velocity:1.7_3"
     
-    compile "org.slf4j:slf4j-api:1.7.2"
-    compile "org.slf4j:slf4j-log4j12:1.7.2"
+    // // compile "org.eclipse.virgo.mirrored:org.glassfish.com.sun.faces:2.1.18.v201304210537:virgo"
+    // // compile "org.restlet.osgi:org.restlet:${restletVersion}"
+    // // compile "org.restlet.osgi:org.restlet.ext.servlet:${restletVersion}"
+    // // compile "org.restlet.osgi:org.restlet.ext.xml:${restletVersion}"
+    // // compile "org.restlet.osgi:org.restlet.ext.jaxrs:${restletVersion}"
+    // // compile "org.restlet.osgi:org.restlet.ext.osgi:${restletVersion}"
+    // // compile "org.restlet.osgi:org.restlet.ext.jaxb:${restletVersion}"
     
-    pickup "com.h2database:h2:${h2Version}"
+    compile_no_plan "javax.enterprise:cdi-api:${cdiVersion}"
+    
+    compile_no_plan "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    compile_no_plan "org.apache.xmlbeans:com.springsource.org.apache.xmlbeans:${xmlbeansVersion}"
+    compile_no_plan "javax.xml.bind:jaxb-api:${jaxbVersion}"
+    compile_no_plan "commons-codec:commons-codec:1.5"
+    
+    // // compile "org.ops4j.pax.logging:pax-logging-api:1.8.2"
+    // // compile "org.ops4j.pax.logging:pax-logging-service:1.8.2"
+    // // compile "org.ops4j.pax.logging:pax-logging-logback:1.8.2"
     
     
-    yaas "com.pennassurancesoftware.org.springframework:spring-aspects-osgi:3.2.11.RELEASE-SNAPSHOT"
-    yaas "com.yaas.module:yaas-annotations:${yaasVersion}"
-    yaas "com.yaas.module:yaas-beans:${yaasVersion}"
-    yaas "com.yaas.module:yaas-business-ul:${yaasVersion}"
-    yaas "com.yaas.module:yaas-commons:${yaasVersion}"
-    yaas "com.yaas.module:yaas-config:${yaasVersion}"
-    yaas "com.yaas.module:yaas-config-ul:${yaasVersion}"
-    yaas "com.yaas.module:yaas-core:${yaasVersion}"
-    yaas "com.yaas.module:yaas-db:${yaasVersion}"
-    yaas "com.yaas.module:yaas-dictionary-api:${yaasVersion}"
-    yaas "com.yaas.module:yaas-dictionary-ul-api:${yaasVersion}"
-    yaas "com.yaas.module:yaas-environment:${yaasVersion}"
-    yaas "com.yaas.module:yaas-exception:${yaasVersion}"
-    yaas "com.yaas.module:yaas-lifecycle-api:${yaasVersion}"
-    yaas "com.yaas.module:yaas-policy:${yaasVersion}"
-    yaas "com.yaas.module:yaas-policy-api:${yaasVersion}"
-    yaas "com.yaas.module:yaas-policy-ul:${yaasVersion}"
-    yaas "com.yaas.module:yaas-policy-ul-api:${yaasVersion}"
-    yaas "com.yaas.module:yaas-rate-api:${yaasVersion}"
-    yaas "com.yaas.module:yaas-rate:${yaasVersion}"
-    yaas "com.yaas.module:yaas-test:${yaasVersion}"
-    yaas "com.yaas.module:yaas-test-case-ul:${yaasVersion}"
-    yaas "com.yaas.module:yaas-xml:${yaasVersion}"
-    
-    yaas "com.yaas.web:yaas-web:${yaasVersion}"
-    yaas "com.yaas.web:yaas-ws:${yaasVersion}"
-    // yaas "com.yaas.web:yaas-ws-client:${yaasVersion}"
+    // Dynamic Yaas Artifacts
+    yaas_pom "com.yaas:yaas:${yaasVersion}@pom"
+    configurations.yaas_pom.resolvedConfiguration.firstLevelModuleDependencies.findAll{ child -> child.moduleName == 'yaas' }.each { dep ->
+        def artifact = configurations.yaas_pom.resolvedConfiguration.resolvedArtifacts.findResult{ it.artifact.name == 'yaas' ? it : null }
+	    def groups = [
+	        "yaas-web": "com.yaas.web", 
+	        "yaas-ws": "com.yaas.web",
+	        "yaas-ws-client": "com.yaas.web",
+	        "spring-aspects-osgi": "com.pennassurancesoftware.org.springframework",
+	    ].withDefault {key -> "com.yaas.module"}
+	    def versions = [
+	        "spring-aspects-osgi": "3.2.11.RELEASE-SNAPSHOT",
+	    ].withDefault {key -> dep.moduleVersion}
+	    def exclude = ["yaas-doclet", "yaas-parent", "yaas-ws-client"]
+	    
+	    def pom = new XmlSlurper().parse( artifact.file )
+	    pom.modules.module.each { e ->
+	       if( !exclude.contains( e.text() ) ) {
+	           yaas2 "${groups[e.text()]}:${e.text()}:${versions[e.text()]}"
+	       }
+	    }        
+    }
     
     virgo "org.eclipse.virgo:${virgoArtifactId}:${virgoVersion}"
     
@@ -318,26 +338,36 @@ dependencies {
 
     aspectj "org.aspectj:com.springsource.org.aspectj.weaver:${aspectjVersion}.RELEASE"
     
-    osgi_tools_dep "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    
     osgi_tools_dep "com.springsource.util:com.springsource.util.parser.manifest:2.0.5.RELEASE"
-    osgi_tools_dep "org.eclipse.aether:aether-util:0.9.0.M2"
-    osgi_tools_dep "org.eclipse.sisu:org.eclipse.sisu.inject:0.1.1"
-    osgi_tools_dep "org.sonatype.sisu:sisu-guice:3.1.6"
+    osgi_tools_dep "org.apache.commons:commons-lang3:${commonsLang3Version}"
     osgi_tools_dep "org.apache.felix:org.apache.felix.shell:1.4.1"
     osgi_tools_dep "org.apache.httpcomponents:httpclient-osgi:4.2.6"
     osgi_tools_dep "org.apache.httpcomponents:httpcore-osgi:4.2.5"
     osgi_tools_dep "com.google.guava:guava:12.0"
-    osgi_tools_dep "org.sonatype.sisu:sisu-inject-bean:2.3.0"
-    osgi_tools_dep "javax.enterprise:cdi-api:1.2"
-    osgi_tools_dep "org.sonatype.sisu:sisu-guava:0.9.9"
-    // osgi_tools_dep "org.slf4j:slf4j-api:1.7.5"
+    osgi_tools_dep "commons-codec:commons-codec:1.10"
+    // osgi_tools_dep_no_plan "org.eclipse.sisu:org.eclipse.sisu.inject:0.3.1"
+    // osgi_tools_dep "org.sonatype.sisu:sisu-guice:3.2.6"
+    // // osgi_tools_dep_no_plan "org.sonatype.sisu:sisu-guava:0.9.9"
+    // osgi_tools_dep_no_plan "org.sonatype.sisu:sisu-inject-bean:2.3.4"
+    
+    // osgi_tools_dep "org.sonatype.sisu:sisu-guice:3.2.6"
+    // osgi_tools_dep_no_plan "org.sonatype.sisu:sisu-inject-bean:2.3.1"
+    
+    
+    // osgi_tools_dep "javax.enterprise:cdi-api:1.2"
     osgi_tools_dep "com.springsource.util:com.springsource.util.osgi:2.0.5.RELEASE"
-    osgi_tools_dep "org.eclipse.aether:aether-api:0.9.0.M2"
-    // osgi_tools_dep "org.slf4j:jcl-over-slf4j:1.6.2"
     osgi_tools_dep "com.springsource.util:com.springsource.util.common:2.0.5.RELEASE"
+    osgi_tools_dep "org.eclipse.aether:aether-util:0.9.0.M2"
+    osgi_tools_dep "org.eclipse.aether:aether-api:0.9.0.M2"
+    osgi_tools_dep "org.testng:testng:6.5.2"
+    osgi_tools_dep "javax.interceptor:javax.interceptor-api:1.2"
+    
+    // osgi_tools_dep "org.slf4j:slf4j-api:1.7.5"
+    // osgi_tools_dep "org.slf4j:jcl-over-slf4j:1.6.2"
     // osgi_tools_dep "ch.qos.logback:logback-core:1.0.7"
     // osgi_tools_dep "ch.qos.logback:logback-classic:1.0.7"
-    osgi_tools_dep  "commons-codec:commons-codec:1.10"
+    
     
     osgi_tools "tools.osgi:osgi.analyzer:1.00.001-SNAPSHOT"
     osgi_tools "tools.osgi:osgi.maven.integration:1.00.001-SNAPSHOT"
@@ -347,7 +377,7 @@ task setupVirgoQuick( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadA
 
 task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeJetty', 'installFelixWebConsole', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'removeVirgoSplash', 'installPickupBundles', 'installYaasDep' ] ) {}
 
-task setupVirgo( dependsOn: [ 'setupVirgoNoYaas', 'installYaas' ] ) {}
+task setupVirgo( dependsOn: [ 'setupVirgoNoYaas', 'installYaas2' ] ) {}
 
 task runVirgo(type:Exec) {
     def executableName = Os.isFamily( Os.FAMILY_WINDOWS ) ? "startup.bat" : "startup.sh"
@@ -399,18 +429,11 @@ task installPaxUrl(dependsOn: [ 'downloadVirgo' ]) << {
         from "${projectDir}/src/main/config/ext"
         into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/ext"
     }
-    copy {
-        from "${projectDir}/src/main/plans/pax-url.plan"
-        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
-    }
+    addPlanToStartup( new File( "${projectDir}/src/main/plans/pax-url.plan" ) )
 }
 
 task installOsgiTools(dependsOn: [ 'downloadVirgo' ]) << {
-    copy {
-        from "${projectDir}/src/main/plans/osgi-tools.plan"
-        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
-    }
-    
+    // Copy Artifacts
     configurations.osgi_tools_dep.resolvedConfiguration.resolvedArtifacts.each {
         artifact -> 
            project.copy {
@@ -418,7 +441,13 @@ task installOsgiTools(dependsOn: [ 'downloadVirgo' ]) << {
                from( artifact.file )
            }
     }
-    
+    configurations.osgi_tools_dep_no_plan.resolvedConfiguration.resolvedArtifacts.each {
+        artifact -> 
+           project.copy {
+               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr" ) 
+               from( artifact.file )
+           }
+    }
     configurations.osgi_tools.resolvedConfiguration.resolvedArtifacts.each {
         artifact -> 
            project.copy {
@@ -426,6 +455,15 @@ task installOsgiTools(dependsOn: [ 'downloadVirgo' ]) << {
                from( artifact.file )
            }
     }
+    
+    // Plan
+    def artifacts = []
+        .plus( configurations.osgi_tools_dep.resolvedConfiguration.resolvedArtifacts )
+        .plus( configurations.osgi_tools.resolvedConfiguration.resolvedArtifacts )
+    def planXml = generatePlan( "osgi-tools.plan", artifacts, [] )
+    def planFile = createTempFile( "osgi-tools.plan" );
+    planFile.write( planXml );
+    addPlanToStartup( planFile )
 }
 
 task installEclipseJtd(dependsOn: [ 'downloadVirgo' ]) << {
@@ -444,10 +482,7 @@ task installEclipseJtd(dependsOn: [ 'downloadVirgo' ]) << {
 task installFelixWebConsole(dependsOn: [ 'downloadVirgo' ]) << {
     if( isJettyVirgo() ) {
         // Copy Plan
-        copy {
-            from "${projectDir}/src/main/plans/felix-web-console.plan"
-            into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
-        }
+        addPlanToStartup( new File( "${projectDir}/src/main/plans/felix-web-console.plan" ) )
         
         // Copy Artifacts
         configurations.felix_web_console.resolvedConfiguration.resolvedArtifacts.each {
@@ -560,6 +595,13 @@ task installUserRegionBundles(dependsOn: [ 'downloadVirgo' ]) << {
                from( artifact.file )
            }
     }
+    configurations.compile_no_plan.resolvedConfiguration.resolvedArtifacts.each {
+        artifact -> 
+           project.copy {
+               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr" ) 
+               from( artifact.file )
+           }
+    }
 }
 
 task installPickupBundles(dependsOn: [ 'downloadVirgo' ]) << {
@@ -572,29 +614,44 @@ task installPickupBundles(dependsOn: [ 'downloadVirgo' ]) << {
     }
 }
 
-task installYaas(dependsOn: [ 'downloadVirgo' ]) << {
-    copy {
-        from "${projectDir}/src/main/plans/yaas.plan"
-        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
+task installYaas2(dependsOn: [ 'downloadVirgo', 'installYaasDep' ]) << {
+    // Yaas Artifacts
+    configurations.compile.resolvedConfiguration.resolvedArtifacts.each {
+        artifact -> 
+           project.copy {
+               into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr" ) 
+               from( artifact.file )
+           }
     }
-    configurations.yaas.resolvedConfiguration.resolvedArtifacts.each {
+    configurations.yaas2.resolvedConfiguration.resolvedArtifacts.each {
         artifact -> 
            project.copy {
                into new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr" ) 
                from( artifact.file ) 
            }
     }
+    
+    // Yaas Plan
+    def artifacts = []
+        .plus( configurations.compile.resolvedConfiguration.resolvedArtifacts )
+        .plus( configurations.yaas2.resolvedConfiguration.resolvedArtifacts )
+    def planXml = generatePlan( "yaas.plan", artifacts, [ "com.yaas" ] )
+    def planFile = createTempFile( "yaas.plan" );
+    planFile.write( planXml );
+    addPlanToStartup( planFile )
+    
+    // Yaas Properties
     new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr/com.yaas.properties" ).withWriter { writer ->
       getYaasConfig().toProperties().store( writer, "Yet Another Admin System Properties" )
     }
-    printConfig( getYaasConfig(), "Yaas Config" )
+    // printConfig( getYaasConfig(), "Yaas Config" )
 }
 
 task installYaasDep(dependsOn: [ 'downloadVirgo' ]) << {
-    copy {
-        from "${projectDir}/src/main/plans/yaas-dep.plan"
-        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
-    }
+    def planXml = generatePlan( "yaas-dep.plan", configurations.compile.resolvedConfiguration.resolvedArtifacts, [] )
+    def planFile = createTempFile( "yaas-dep.plan" );
+    planFile.write( planXml );
+    addPlanToStartup( planFile );
 }
 
 task updateVirgoSettings { shouldRunAfter downloadVirgo } << {
@@ -655,6 +712,144 @@ buildscript {
         classpath 'org.osgi:org.osgi.core:4.3.1'
     }
 }
+
+def createTempFile( fileName ) {
+    def temp = File.createTempFile( "temp", Long.toString( System.nanoTime() ) );
+    temp.delete()
+    temp.mkdir()
+    return new File( "${temp.absolutePath}/$fileName" );
+}
+
+def addPlanToStartup( planFile ) {
+    // Copy Plan
+    copy {
+        from planFile
+        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup"
+    }
+
+    // Get Or Create Startup Plan
+    // def startupFile = new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/pickup/startup.plan" );
+    // if( !startupFile.exists() ) {
+    //     def planXml = generatePlan( "startup.plan", [], [] )
+    //     startupFile.write( planXml );
+    // }
+    
+    // Add plan to startup plan
+    // addPlanToPlan( startupFile, planFile );
+}
+
+import groovy.xml.XmlUtil
+def addPlanToPlan( parentPlanFile, childPlanFile ) {
+    def parentXml = new XmlParser().parse( parentPlanFile );
+    def childXml = new XmlSlurper().parse( childPlanFile );
+    def childPlanName = childXml.@name;
+    def childVersion = childXml.@version;
+    // def node = """artifact type="plan" name="$childPlanName" version="$childVersion" """;
+    // parentXml.appendNode( node )
+    
+
+    def artifacts = parentXml.children()
+    def artifact = new Node( parentXml, "artifact", [type:"plan", name:"$childPlanName", version:"$childVersion"] )
+    
+	
+	def writer = new StringWriter()
+	new XmlNodePrinter( new PrintWriter( writer ) ).print( parentXml )
+	parentPlanFile.write( writer.toString() );
+}
+
+import groovy.xml.MarkupBuilder
+def generatePlan( planName, artifacts, configurations ) {
+    def writer = new StringWriter()
+    def xml = new MarkupBuilder(writer)
+    
+    def sorted = sortBundleArtifacts( artifacts );
+    
+    xml.plan( 
+        "name":"$planName",
+        "version":"1.0.0",
+        "scoped":"false",
+        "atomic":"false",
+        "provisioning":"auto",
+        "xmlns":"http://www.eclipse.org/virgo/schema/plan",
+        "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance",
+        "xsi:schemaLocation":"http://www.eclipse.org/virgo/schema/plan http://www.eclipse.org/virgo/schema/plan/eclipse-virgo-plan.xsd",
+        ) {
+        configurations.each {
+            conf ->
+                artifact(type:"configuration", name:"$conf", version:"0") {}
+        }
+        sorted.each {
+	        artfct -> 
+	            def bundleManifest = getBundleManifest( artfct.file );
+                Validate.notNull( bundleManifest, "No manifest could be found for jar file: ${artfct.file}" );
+	            def symbolicName = bundleManifest.bundleSymbolicName.symbolicName;
+                def versionNumber = bundleManifest.bundleVersion.toString();
+	            
+	            artifact(type:"bundle", name:"$symbolicName", version:"$versionNumber") {}
+	    }
+	}
+    return writer.toString();
+}
+
+def sortBundleArtifacts( artifacts ) {
+    def ordered = []
+    def adjustedFlag = false;
+	for( int index = 0; index < artifacts.size(); index++ ) {
+	   def artifact = artifacts[ index ];
+	   // Find bundles in list that this one depends on and add them to the ordered list
+	   for( int importIndex = index + 1; importIndex < artifacts.size(); importIndex++ ) {
+	       def otherArtifact = artifacts[ importIndex ];
+	       if( isDependentOn( artifact, otherArtifact ) ) {
+	           if( !ordered.contains( otherArtifact ) && !isCircular( artifact, otherArtifact ) ) {
+	               adjustedFlag = true;
+	               ordered.add( otherArtifact );
+	           }
+	       }
+	   }
+	   if( !ordered.contains( artifact ) ) {
+	       ordered.add( artifact );
+	   }
+	}
+	if( adjustedFlag ) {
+	   sortBundleArtifacts( ordered );
+	}
+    artifacts.clear();
+    artifacts.addAll( ordered );
+    return ordered;
+}
+
+
+def isDependentOn( artifact, otherArtifact ) {
+    def result = false;
+    def artifactManifest = getBundleManifest( artifact.file );
+    def otherArtifactManifest = getBundleManifest( otherArtifact.file );
+    Validate.notNull( artifactManifest, "No manifest could be found for jar file: ${artifact.file}" );
+    Validate.notNull( otherArtifactManifest, "No manifest could be found for jar file: ${otherArtifact.file}" );
+    result = artifactManifest.importPackage.importedPackages.find { importedPackage ->
+        containsExportForImport( otherArtifactManifest, importedPackage );
+    } != null;
+    return result;
+}
+
+def containsExportForImport( manifest, importedPackage ) {
+    return getExportedPackage( manifest, importedPackage ) != null;
+}
+
+def getExportedPackage( manifest, importedPackage ) {
+    def result = null;
+    if( manifest != null ) {
+        def exportedPackages = manifest.exportPackage != null ? manifest.exportPackage.exportedPackages : [];
+        result = exportedPackages.find { exportedPackage ->
+            exportedPackage.packageName.equals( importedPackage.packageName ) && importedPackage.version.includes( exportedPackage.version )
+        }
+    }
+    return result;
+}
+
+def isCircular( artifactA, artifactB ) {
+	return isDependentOn( artifactA, artifactB ) && isDependentOn( artifactB, artifactA );
+}
+
 
 import org.apache.commons.lang.Validate;
 def addPluginToBundleList( file ) {
@@ -742,7 +937,7 @@ def printConfig( config, title ) {
 // Example of different environment: gradle -Penv=test setupVirgo
 def getYaasConfig() { 
     def environment = hasProperty( 'env' ) ? env : 'dev'
-    println "Environment is set to $environment"
+    // println "Environment is set to $environment"
     
     def configFile = file( 'src/main/config/yaas-config.groovy' )
     def raw = new ConfigSlurper( environment ).parse( configFile.toURL() )
