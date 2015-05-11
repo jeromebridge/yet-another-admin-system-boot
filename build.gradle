@@ -614,7 +614,7 @@ task installPickupBundles(dependsOn: [ 'downloadVirgo' ]) << {
     }
 }
 
-task installYaas2(dependsOn: [ 'downloadVirgo', 'installYaasDep' ]) << {
+task installYaas2(dependsOn: [ 'downloadVirgo', 'installYaasDep', 'removeVirgoSplash' ]) << {
     // Yaas Artifacts
     configurations.compile.resolvedConfiguration.resolvedArtifacts.each {
         artifact -> 
@@ -639,12 +639,15 @@ task installYaas2(dependsOn: [ 'downloadVirgo', 'installYaasDep' ]) << {
     def planFile = createTempFile( "yaas.plan" );
     planFile.write( planXml );
     addPlanToStartup( planFile )
-    
+
     // Yaas Properties
     new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/repository/usr/com.yaas.properties" ).withWriter { writer ->
       getYaasConfig().toProperties().store( writer, "Yet Another Admin System Properties" )
     }
     // printConfig( getYaasConfig(), "Yaas Config" )
+    
+    // Root Context
+    setRootContext( "/yweb" );
 }
 
 task installYaasDep(dependsOn: [ 'downloadVirgo' ]) << {
@@ -681,6 +684,9 @@ task removeVirgoSplash { shouldRunAfter downloadVirgo } << {
             includes: "*splash*.jar"
         )
     }
+    
+    // Rewrite - Admin
+    setRootContext( "/admin" );
 }
 
 task upgradeSpringAndAspectJ(type: UpdateSpringAndAspectJTask, dependsOn: [ 'downloadSpring', 'downloadAspectJ' ]) {
@@ -710,6 +716,55 @@ buildscript {
         classpath 'com.springsource.util:com.springsource.util.common:2.0.5.RELEASE'
         classpath 'com.springsource.util:com.springsource.util.osgi:2.0.5.RELEASE'
         classpath 'org.osgi:org.osgi.core:4.3.1'
+    }
+}
+
+def setRootContext( path ) {
+    if( isJettyVirgo() ) {
+        def jettyFile = new File( "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/jetty/etc/jetty.xml" );
+        def parser = new XmlParser();
+        parser.setFeature( "http://apache.org/xml/features/disallow-doctype-decl", false );
+        def jettyXml = parser.parse( jettyFile );
+        
+        // Remove Existing Rewrite Handler
+        def nodeToDel = jettyXml.
+                Set.find {it.@name == "handler"}.
+                New.Set.find{it.@name == "handlers"}.
+                Array.Item.New.find{it.@class == "org.eclipse.jetty.rewrite.handler.RewriteHandler"}
+        if( nodeToDel != null ) {
+            nodeToDel.parent().parent().children().remove( nodeToDel.parent() )
+        }
+        
+        // Add Rewrite Handler
+        def arrayNode = jettyXml.
+                Set.find {it.@name == "handler"}.
+                New.Set.find{it.@name == "handlers"}.
+                Array[0];
+        def newNode = new Node( arrayNode, "Item", [] )
+        arrayNode.children().remove( newNode );
+        arrayNode.children().add( 0, newNode );
+        newNode.replaceNode{ 
+	       Item {
+	          New( id: "Rewrite", class: "org.eclipse.jetty.rewrite.handler.RewriteHandler" ) {
+	             Set( name: "rewriteRequestURI", "true" )
+                 Set( name: "rewritePathInfo", "false" )
+                 Set( name: "originalPathAttribute", "requestedPath" )
+                 Call( name: "addRule" ) {
+                    Arg {
+                       New( class: "org.eclipse.jetty.rewrite.handler.RedirectRegexRule" ) {
+                          Set( name: "regex", '^/?$' )
+                          Set( name: "replacement", "${path}" )
+                          Set( name: "terminating", "true" )
+                       }
+                    }
+                 }
+	          }
+	       }
+	    }
+        
+        def writer = new StringWriter()
+	    new XmlNodePrinter( new IndentPrinter( new PrintWriter( writer ), '', false ) ).print( jettyXml )
+	    jettyFile.write( writer.toString() );
     }
 }
 

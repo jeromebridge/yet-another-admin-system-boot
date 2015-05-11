@@ -11,6 +11,8 @@
 		<artifact type="bundle" name="org.eclipse.jetty.osgi.boot" version="[8.1, 9.0)"/>
 		<artifact type="bundle" name="org.eclipse.virgo.web.dm" version="[3.1, 4.0)"/>
         
+        <!-- Jetty Rewrite -->
+        <artifact type="bundle" name="org.eclipse.jetty.rewrite" version="[8.1, 9.0)"/>
         
         <!-- HTTP Service -->
         <artifact type="bundle" name="org.eclipse.equinox.http.servlet" version="[1.1,2.0)" />
