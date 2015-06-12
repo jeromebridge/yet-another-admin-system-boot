@@ -1,0 +1,47 @@
+apply plugin: 'maven-publish'
+
+group 'org.amdatu.dependencies'
+version = '1.0.0'
+
+publishing {
+	repositories {
+        maven {
+        	url "http://repo.pennassurancesoftware.com/artifactory/amdatu-dependencies-mirror"
+        	credentials {
+		        username 'jbc'
+		        password 'london10'
+		    }
+        }
+    }
+    publications {
+        impl(MavenPublication) {
+            groupId 'org.gradle.sample.impl'
+            artifactId 'project2-impl'
+            version '2.3'
+
+            artifact "build/staging/virgo/virgo-jetty-server-3.6.3.RELEASE/repository/usr/org.amdatu.web.rest.doc-1.2.2.jar"
+        }
+        api(MavenPublication) {
+            groupId 'org.gradle.sample'
+            artifactId 'project2-api'
+            version '2'
+
+            artifact "build/staging/virgo/virgo-jetty-server-3.6.3.RELEASE/repository/usr/org.amdatu.web.rest.doc-1.2.2.jar"
+        }
+		fileTree( "build/staging/virgo/virgo-jetty-server-3.6.3.RELEASE/repository/usr" ).matching { include "*.jar" }.each {
+			File file ->
+			    def fbase = file.name.lastIndexOf('.').with {it != -1 ? file.name[0..<it] : file.name}
+			    def artifactName = file.name.split("-")[0]
+			    def versionNum=fbase.split("-").last()
+			    def num=Math.abs(new Random().nextInt())
+			    def uploadName="artifact$num"
+         		println "$uploadName version: $versionNum name: $artifactName"
+         		"$uploadName"(MavenPublication) {
+		            groupId 'org.gradle.sample'
+		            artifactId artifactName
+		            version versionNum
+		            artifact file
+		        }
+		}
+    }
+}

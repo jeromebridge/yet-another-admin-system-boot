@@ -1,0 +1,35 @@
+apply plugin: 'maven'
+
+group 'org.amdatu.dependencies'
+version = '1.0.0'
+
+ext {
+    // location of external files relative to this build.gradle file
+    extFiles = [
+        main:       'build/staging/virgo/virgo-jetty-server-3.6.3.RELEASE/repository/usr/org.amdatu.web.rest.doc-1.2.2.jar',
+        sources:    'build/staging/virgo/virgo-jetty-server-3.6.3.RELEASE/repository/usr/org.amdatu.web.rest.doc-1.2.2.jar',
+        javadoc:    'build/staging/virgo/virgo-jetty-server-3.6.3.RELEASE/repository/usr/org.amdatu.web.rest.doc-1.2.2.jar'
+    ]
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        pom.project {
+            name 'Penn Assurance Software: Amdatu Dependencies (Mirror)'
+            organization {
+                name 'Penn Assurance Software'
+            }
+        }
+        repository( id: 'amdatu-dependencies', url: 'http://repo.pennassurancesoftware.com/artifactory/amdatu-dependencies-mirror' ) {
+        	authentication( userName: "jbc", password: "london10" )
+        }
+    }
+}
+
+artifacts {
+    archives file: file( extFiles.main ), type: 'jar', version: "1.2.2"
+    
+}
+
+
+
