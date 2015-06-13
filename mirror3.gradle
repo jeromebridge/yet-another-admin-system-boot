@@ -1,6 +1,4 @@
-apply plugin: 'maven-publish'
-
-group 'org.amdatu.dependencies'
+apply plugin: 'maven'
 version = '1.0.0'
 
 buildscript {
@@ -14,56 +12,95 @@ buildscript {
     }
 }
 
+configurations {
+    allJars
+}
+
+ext {
+	amdatuUrl = 'http://repository.amdatu.org/dependencies'
+	repoUrl = 'http://repo.pennassurancesoftware.com/artifactory/amdatu-dependencies-mirror'
+	groupId = "org.test"
+}
+
+task uploadDependencies( dependsOn: [ 'uploadAllJars' ] ) << {}
+task uploadReleases( dependsOn: [ 'uploadAllJars' ] ) << {}
+task mirrorDependencies ( dependsOn: [ 'mirror' ] ) << {}
+task mirrorReleases ( dependsOn: [ 'mirror' ] ) << {}
+task mirrorAndUploadDependencies ( dependsOn: [ 'mirrorDependencies', 'uploadDependencies' ] ) << {}
+task mirrorAndUploadReleases ( dependsOn: [ 'mirrorReleases', 'uploadReleases' ] ) << {}
+
 task mirror << {
-	crawl( "http://repository.amdatu.org/dependencies", "build/mirror" );
+	crawl( amdatuUrl, "build/mirror" );
 }
 
-task mirrorDependencies << {
-	crawl( "http://repository.amdatu.org/dependencies", "build/mirror" );
-}
-
-task mirrorReleases << {
-	crawl( "http://repository.amdatu.org/releases", "build/mirror" );
-}
-
-publishing {
-	repositories {
-        maven {
-        	name "dependencies"
-        	url "http://repo.pennassurancesoftware.com/artifactory/amdatu-dependencies-mirror"
-        	credentials {
-		        username 'jbc'
-		        password 'london10'
-		    }
-        }
-        maven {
-        	name "releases"
-        	url "http://repo.pennassurancesoftware.com/artifactory/amdatu-releases-mirror"
-        	credentials {
-		        username 'jbc'
-		        password 'london10'
-		    }
-        }
+gradle.taskGraph.whenReady {taskGraph ->
+    if( taskGraph.hasTask( uploadDependencies ) ) {
+        project.ext.repoUrl = 'http://repo.pennassurancesoftware.com/artifactory/amdatu-dependencies-mirror'
+		project.ext.groupId = "org.amdatu.dependency"
+    } else if( taskGraph.hasTask( uploadReleases ) ) {
+        project.ext.repoUrl = 'http://repo.pennassurancesoftware.com/artifactory/amdatu-releases-mirror'
+		project.ext.groupId = "org.amdatu"
     }
-    publications {
-		fileTree( "build/mirror" ).matching { include "**/*.jar" }.each {
-			File file ->
-			    def fbase = file.name.lastIndexOf('.').with {it != -1 ? file.name[0..<it] : file.name}
-			    def artifactName = file.name.split("-")[0]
-			    def versionNum=fbase.split("-").last()
-			    def num=Math.abs(new Random().nextInt())
-			    def uploadName="artifact$num"
-         		// println "$uploadName version: $versionNum name: $artifactName"
-         		"$uploadName"(MavenPublication) {
-		            groupId 'org.amdatu.dependency'
-		            artifactId artifactName
-		            version versionNum
-		            artifact file
-		        }
-		}
+    
+    if( taskGraph.hasTask( mirrorDependencies ) ) {
+    	project.ext.amdatuUrl = 'http://repository.amdatu.org/dependencies'
+    } else if( taskGraph.hasTask( mirrorReleases ) ) {
+    	project.ext.amdatuUrl = 'http://repository.amdatu.org/release'
     }
 }
 
+uploadAllJars {
+   repositories {  
+        mavenDeployer {  
+            repository( url: repoUrl ) {  
+                authentication( userName: 'jbc', password: 'london10' );  
+            }
+       }
+   }
+}
+
+task discoverAllJars{
+    ext.discoveredFiles = []
+    doLast{
+        fileTree( "build/mirror" ).matching { include "**/*.jar" }.each { File file ->
+            println "found file ${file.name}" 
+            discoveredFiles << file
+            artifacts{
+                allJars file
+            }
+        }   
+    }
+}
+
+task configureUploadAllJars {
+    dependsOn discoverAllJars
+    doLast{
+        uploadAllJars {
+           repositories {  
+                mavenDeployer {  
+                    repository( url: repoUrl ) {  
+		                authentication( userName: 'jbc', password: 'london10' );
+		            }
+                    discoverAllJars.discoveredFiles.each{ discoveredFile ->
+                        def filterName = discoveredFile.name - ".jar"
+                        def fbase = discoveredFile.name.lastIndexOf('.').with {it != -1 ? discoveredFile.name[0..<it] : discoveredFile.name}
+			    		def artifactId = discoveredFile.name.split("-")[0]
+			    		def versionNum = fbase.split("-").last()
+                        addFilter(filterName) { artifact, file ->
+                            file.name == discoveredFile.name
+                        }
+                        pom(filterName).artifactId = artifactId
+                        pom(filterName).groupId = groupId
+                        pom(filterName).version = versionNum
+                    }
+                }  
+            }  
+        }   
+    }
+}
+
+uploadAllJars.dependsOn configureUploadAllJars
+uploadAllJars.mustRunAfter mirror
 
 
 import edu.uci.ics.crawler4j.crawler.WebCrawler;

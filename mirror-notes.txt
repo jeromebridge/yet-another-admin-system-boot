@@ -1,0 +1,5 @@
+## Mirror Amdatu Dependencies
+./gradlew -b mirror3.gradle mirrorAndUploadDependencies
+
+## Mirror Amdatu Releases
+./gradlew -b mirror3.gradle mirrorAndUploadReleases
