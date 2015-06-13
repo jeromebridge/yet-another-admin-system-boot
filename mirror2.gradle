@@ -11,12 +11,12 @@ buildscript {
     }
         
     dependencies {
-        classpath 'edu.uci.ics:crawler4j:4.1'
+        classpath "edu.uci.ics:crawler4j:4.1"
     }
 }
 
 task mirror << {
-	crawl( "http://repository.amdatu.org/dependencies", "tmp" );
+	crawl( "http://repository.amdatu.org/dependencies", "build/mirror" );
 }
 
 publishing {
@@ -30,30 +30,16 @@ publishing {
         }
     }
     publications {
-        impl(MavenPublication) {
-            groupId 'org.gradle.sample.impl'
-            artifactId 'project2-impl'
-            version '2.3'
-
-            artifact "build/staging/virgo/virgo-jetty-server-3.6.3.RELEASE/repository/usr/org.amdatu.web.rest.doc-1.2.2.jar"
-        }
-        api(MavenPublication) {
-            groupId 'org.gradle.sample'
-            artifactId 'project2-api'
-            version '2'
-
-            artifact "build/staging/virgo/virgo-jetty-server-3.6.3.RELEASE/repository/usr/org.amdatu.web.rest.doc-1.2.2.jar"
-        }
-		fileTree( "build/staging/virgo/virgo-jetty-server-3.6.3.RELEASE/repository/usr" ).matching { include "*.jar" }.each {
+		fileTree( "build/mirror" ).matching { include "**/*.jar" }.each {
 			File file ->
 			    def fbase = file.name.lastIndexOf('.').with {it != -1 ? file.name[0..<it] : file.name}
 			    def artifactName = file.name.split("-")[0]
 			    def versionNum=fbase.split("-").last()
 			    def num=Math.abs(new Random().nextInt())
 			    def uploadName="artifact$num"
-         		println "$uploadName version: $versionNum name: $artifactName"
+         		// println "$uploadName version: $versionNum name: $artifactName"
          		"$uploadName"(MavenPublication) {
-		            groupId 'org.gradle.sample'
+		            groupId 'org.amdatu.dependency'
 		            artifactId artifactName
 		            version versionNum
 		            artifact file
@@ -62,16 +48,95 @@ publishing {
     }
 }
 
+
+
+
+
+
+import edu.uci.ics.crawler4j.crawler.WebCrawler;
+import edu.uci.ics.crawler4j.crawler.Page;
+import java.util.regex.Pattern;
+import edu.uci.ics.crawler4j.url.WebURL;
+import edu.uci.ics.crawler4j.parser.HtmlParseData;
+import edu.uci.ics.crawler4j.parser.BinaryParseData;
+import edu.uci.ics.crawler4j.crawler.CrawlController;
+import java.util.UUID;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public class MyCrawler extends WebCrawler {
+    private final static Pattern FILTERS = Pattern.compile( '.*(\\.(css|js|mid|mp2|mp3|mp4|wav|avi|mov|mpeg|ram|m4v|pdf|rm|smil|wmv|swf|wma|zip|rar|gz))$' );
+    private final static Pattern JAR_PATTERNS = Pattern.compile( '.*(\\.(jar))$' );
+	
+	private final String baseUrl;
+	private final File storageFolder;
+	
+	public MyCrawler( String baseUrl, File storageFolder ) {
+		this.baseUrl = baseUrl;
+		this.storageFolder= storageFolder;
+		if ( !storageFolder.exists() ) {
+	    	storageFolder.mkdirs();
+	    }
+	}
+
+    /**
+     * This method receives two parameters. The first parameter is the page
+     * in which we have discovered this new url and the second parameter is
+     * the new url. You should implement this function to specify whether
+     * the given url should be crawled or not (based on your crawling logic).
+     * In this example, we are instructing the crawler to ignore urls that
+     * have css, js, git, ... extensions and to only accept urls that start
+     * with base URL. In this case, we didn't need the
+     * referringPage parameter to make the decision.
+     */
+     @Override
+     public boolean shouldVisit(Page referringPage, WebURL url) {
+	    final String href = url.getURL().toLowerCase();
+	    boolean result = !FILTERS.matcher( href ).matches();
+	    result = result && ( href.startsWith( baseUrl ) || JAR_PATTERNS.matcher( href ).matches() );
+		return result;
+     }
+
+     /**
+      * This function is called when a page is fetched and ready
+      * to be processed by your program.
+      */
+     @Override
+     public void visit(Page page) {
+     	String url = page.getWebURL().getURL();
+     	if( JAR_PATTERNS.matcher(url).matches() && page.getParseData() instanceof BinaryParseData ) {
+     		final String extension = url.substring( url.lastIndexOf('.') );
+     		final String fileName = url.substring( url.lastIndexOf( '/' ) );
+     		String pathName = url.substring( baseUrl.length(), url.lastIndexOf( '/' ) );
+     		pathName = pathName.startsWith( "/") ? pathName.substring( 1 ) : pathName;
+            new File( "${storageFolder.absolutePath}/$pathName" ).mkdirs();
+            final Path path = Paths.get( storageFolder.absolutePath, pathName, fileName );
+            try {
+      			Files.write( path, page.getContentData() );
+      			println "Stored: $path";
+    		} catch (IOException iox) {
+      			println "Failed to write file: $path reason: $iox";
+    		}
+     	}  
+     }
+}
+
+
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 def crawl( url, dest ) {
+	delete dest
 
+    def MEGABYTE = 1024L * 1024L;
 	def numberOfCrawlers = 7;
     def config = new CrawlConfig();
-    config.setCrawlStorageFolder(dest);
+    config.crawlStorageFolder = "$dest/tmp";
+    config.maxDownloadSize = 100L * MEGABYTE; // 100MB
+    config.includeBinaryContentInCrawling = true;
 
     /*
      * Instantiate the controller for this crawl.
@@ -96,65 +161,9 @@ def crawl( url, dest ) {
      */
     def num = Math.abs(new Random().nextInt())
     def className = "Crawler$num"
-    // def classLoader = new GroovyClassLoader(  buildscript.classLoader )
     def classLoader = new GroovyClassLoader();
-    def crawlerClass = classLoader.parseClass( "public class $className extends MyCrawler{ public $className(){super( \"$url\" ); } }" )  
+    def crawlerClass = classLoader.parseClass( "public class $className extends MyCrawler{ public $className(){super( \"$url\", new java.io.File( \"$dest/download\") ); } }" )  
     
     controller.start( crawlerClass, numberOfCrawlers );
 
-}
-
-
-import edu.uci.ics.crawler4j.crawler.WebCrawler;
-import edu.uci.ics.crawler4j.crawler.Page;
-import java.util.regex.Pattern;
-import edu.uci.ics.crawler4j.url.WebURL;
-import edu.uci.ics.crawler4j.parser.HtmlParseData;
-import edu.uci.ics.crawler4j.crawler.CrawlController;
-
-public class MyCrawler extends WebCrawler {
-    private final static Pattern FILTERS = Pattern.compile('.*(\\.(css|js|gif|jpg|png|mp3|mp3|zip|gz|jar))$');
-	
-	private final String baseUrl;
-	
-	public MyCrawler( String baseUrl ) {
-		this.baseUrl = baseUrl;
-	}
-
-    /**
-     * This method receives two parameters. The first parameter is the page
-     * in which we have discovered this new url and the second parameter is
-     * the new url. You should implement this function to specify whether
-     * the given url should be crawled or not (based on your crawling logic).
-     * In this example, we are instructing the crawler to ignore urls that
-     * have css, js, git, ... extensions and to only accept urls that start
-     * with base URL. In this case, we didn't need the
-     * referringPage parameter to make the decision.
-     */
-     @Override
-     public boolean shouldVisit(Page referringPage, WebURL url) {
-         String href = url.getURL().toLowerCase();
-         return !FILTERS.matcher(href).matches() && href.startsWith( baseUrl );
-     }
-
-     /**
-      * This function is called when a page is fetched and ready
-      * to be processed by your program.
-      */
-     @Override
-     public void visit(Page page) {
-         String url = page.getWebURL().getURL();
-         System.out.println("URL: " + url);
-
-         if (page.getParseData() instanceof HtmlParseData) {
-             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-             String text = htmlParseData.getText();
-             String html = htmlParseData.getHtml();
-             Set<WebURL> links = htmlParseData.getOutgoingUrls();
-
-             System.out.println("Text length: " + text.length());
-             System.out.println("Html length: " + html.length());
-             System.out.println("Number of outgoing links: " + links.size());
-         }
-    }
 }
