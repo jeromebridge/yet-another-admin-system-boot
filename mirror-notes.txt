@@ -3,3 +3,6 @@
 
 ## Mirror Amdatu Releases
 ./gradlew -b mirror3.gradle mirrorAndUploadReleases
+
+## Mirror Penn Assurance Software Releases
+./gradlew -b mirror3.gradle mirrorAndUploadPasReleases

@@ -24,10 +24,13 @@ ext {
 
 task uploadDependencies( dependsOn: [ 'uploadAllJars' ] ) << {}
 task uploadReleases( dependsOn: [ 'uploadAllJars' ] ) << {}
+task uploadPasReleases( dependsOn: [ 'uploadAllJars' ] ) << {}
 task mirrorDependencies ( dependsOn: [ 'mirror' ] ) << {}
 task mirrorReleases ( dependsOn: [ 'mirror' ] ) << {}
+task mirrorPasReleases ( dependsOn: [ 'mirror' ] ) << {}
 task mirrorAndUploadDependencies ( dependsOn: [ 'mirrorDependencies', 'uploadDependencies' ] ) << {}
 task mirrorAndUploadReleases ( dependsOn: [ 'mirrorReleases', 'uploadReleases' ] ) << {}
+task mirrorAndUploadPasReleases ( dependsOn: [ 'mirrorPasReleases', 'uploadPasReleases' ] ) << {}
 
 task mirror << {
 	crawl( amdatuUrl, "build/mirror" );
@@ -40,12 +43,18 @@ gradle.taskGraph.whenReady {taskGraph ->
     } else if( taskGraph.hasTask( uploadReleases ) ) {
         project.ext.repoUrl = 'http://repo.pennassurancesoftware.com/artifactory/amdatu-releases-mirror'
 		project.ext.groupId = "org.amdatu"
+    } else if( taskGraph.hasTask( uploadPasReleases ) ) {
+        project.ext.repoUrl = 'http://repo.pennassurancesoftware.com/artifactory/pennassurancesoftware-releases-mirror'
+		project.ext.groupId = "com.pennassurancesoftware"
     }
+    
     
     if( taskGraph.hasTask( mirrorDependencies ) ) {
     	project.ext.amdatuUrl = 'http://repository.amdatu.org/dependencies'
     } else if( taskGraph.hasTask( mirrorReleases ) ) {
     	project.ext.amdatuUrl = 'http://repository.amdatu.org/release'
+    } else if( taskGraph.hasTask( mirrorPasReleases ) ) {
+    	project.ext.amdatuUrl = 'http://repo3.pennassurancesoftware.com/content/repositories/osgi-releases'
     }
 }
 
