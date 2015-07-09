@@ -706,7 +706,7 @@ task installYaas2(dependsOn: [ 'downloadVirgo', 'installYaasDep', 'removeVirgoSp
     // printConfig( getYaasConfig(), "Yaas Config" )
     
     // Root Context
-    setRootContext( "/yweb" );
+    // setRootContext( "/yweb" );
 }
 
 task installYaasDep(dependsOn: [ 'downloadVirgo' ]) << {
@@ -745,7 +745,7 @@ task removeVirgoSplash { shouldRunAfter downloadVirgo } << {
     }
     
     // Rewrite - Admin
-    setRootContext( "/admin" );
+    // setRootContext( "/admin" );
 }
 
 task upgradeSpringAndAspectJ(type: UpdateSpringAndAspectJTask, dependsOn: [ 'downloadSpring', 'downloadAspectJ' ]) {
