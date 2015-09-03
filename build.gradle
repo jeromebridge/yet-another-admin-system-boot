@@ -159,7 +159,7 @@ dependencies {
     compile "org.eclipse.persistence:org.eclipse.persistence.asm:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.antlr:${eclipselinkVersion}"
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.spring-aspects:${springVersion}_2"
-    // compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.javax-inject:1_2"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.javax-inject:1_2"
    
     // Amdatu
     compile "org.amdatu:org.apache.felix.http.api:2.3.2"
@@ -440,9 +440,11 @@ dependencies {
 
 task setupVirgoQuick( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'upgradeSpringAndAspectJ', 'updateVirgoSettings', 'removeVirgoSplash' ] ) {}
 
-task setupVirgoNoYaas( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeJetty', 'installFelixWebConsole', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'removeVirgoSplash', 'installPickupBundles', 'installYaasDep' ] ) {}
+task setupVirgoBase( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeJetty', 'installFelixWebConsole', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'removeVirgoSplash', 'installPickupBundles', 'installYaasDep' ] ) {}
 
-task setupVirgo( dependsOn: [ 'setupVirgoNoYaas', 'installYaas2' ] ) {}
+task setupVirgoNoYaas( dependsOn: [ 'setupVirgoBase', 'installYaasDep' ] ) {}
+
+task setupVirgo( dependsOn: [ 'setupVirgoBase', 'installYaas2' ] ) {}
 
 task runVirgo(type:Exec) {
     def executableName = Os.isFamily( Os.FAMILY_WINDOWS ) ? "startup.bat" : "startup.sh"
