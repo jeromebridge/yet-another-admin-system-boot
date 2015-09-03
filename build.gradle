@@ -440,7 +440,7 @@ dependencies {
 
 task setupVirgoQuick( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'upgradeSpringAndAspectJ', 'updateVirgoSettings', 'removeVirgoSplash' ] ) {}
 
-task setupVirgoBase( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeJetty', 'installFelixWebConsole', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'removeVirgoSplash', 'installPickupBundles', 'installYaasDep' ] ) {}
+task setupVirgoBase( dependsOn: [ 'downloadVirgo', 'downloadSpring', 'downloadAspectJ', 'installPaxUrl', 'installOsgiTools', 'upgradeJetty', 'installFelixWebConsole', 'upgradeSpringAndAspectJ', 'installUserRegionBundles', 'updateVirgoSettings', 'removeVirgoSplash', 'installPickupBundles' ] ) {}
 
 task setupVirgoNoYaas( dependsOn: [ 'setupVirgoBase', 'installYaasDep' ] ) {}
 
@@ -681,7 +681,7 @@ task installPickupBundles(dependsOn: [ 'downloadVirgo' ]) << {
     }
 }
 
-task installYaas2(dependsOn: [ 'downloadVirgo', 'installYaasDep', 'removeVirgoSplash' ]) << {
+task installYaas2(dependsOn: [ 'downloadVirgo', 'removeVirgoSplash' ]) << {
     // Yaas Artifacts
     configurations.compile.resolvedConfiguration.resolvedArtifacts.each {
         artifact -> 
