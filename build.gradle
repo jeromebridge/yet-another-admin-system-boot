@@ -159,7 +159,7 @@ dependencies {
     compile "org.eclipse.persistence:org.eclipse.persistence.asm:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.antlr:${eclipselinkVersion}"
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.spring-aspects:${springVersion}_2"
-    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.javax-inject:1_2"
+    // compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.javax-inject:1_2"
    
     // Amdatu
     compile "org.amdatu:org.apache.felix.http.api:2.3.2"
