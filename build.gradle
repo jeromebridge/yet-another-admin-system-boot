@@ -159,6 +159,7 @@ dependencies {
     compile "org.eclipse.persistence:org.eclipse.persistence.asm:${eclipselinkVersion}"
     compile "org.eclipse.persistence:org.eclipse.persistence.antlr:${eclipselinkVersion}"
     compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.spring-aspects:${springVersion}_2"
+    compile "org.apache.servicemix.bundles:org.apache.servicemix.bundles.javax-inject:1_2"
    
     // Amdatu
     compile "org.amdatu:org.apache.felix.http.api:2.3.2"
@@ -246,14 +247,16 @@ dependencies {
 	        "yaas-ws": "com.yaas.web",
 	        "yaas-ws-rate": "com.yaas.web",
 	        "yaas-ws-client": "com.yaas.web",
-	        "yaas-policy-ws": "com.yaas.web",
-	        "yaas-policy-ul-ws": "com.yaas.web",
+	        "yaas-ui": "com.yaas.web",
+	        "yaas-policy-ws": "com.yaas.ws",
+	        "yaas-policy-ul-ws": "com.yaas.ws",
+	        "yaas-ws-api": "com.yaas.ws",
 	        "spring-aspects-osgi": "com.pennassurancesoftware.org.springframework",
 	    ].withDefault {key -> "com.yaas.module"}
 	    def versions = [
 	        "spring-aspects-osgi": "3.2.11.RELEASE-SNAPSHOT",
 	    ].withDefault {key -> dep.moduleVersion}
-	    def exclude = ["yaas-doclet", "yaas-parent", "yaas-ws-client"]
+	    def exclude = ["yaas-doclet", "yaas-parent", "yaas-ws-client", "yaas-dto-generator", "yaas-dto-maven-plugin", "maven-plugins", ]
 	    
 	    def pom = new XmlSlurper().parse( artifact.file )
 	    pom.modules.module.each { e ->
@@ -902,6 +905,8 @@ def generatePlan( planName, artifacts, configurations ) {
                 Validate.notNull( bundleManifest, "No manifest could be found for jar file: ${artfct.file}" );
 	            def symbolicName = bundleManifest.bundleSymbolicName.symbolicName;
                 def versionNumber = bundleManifest.bundleVersion.toString();
+                Validate.notNull( symbolicName, "No symbolic name could be determined for jar file: ${artfct.file}" );
+                Validate.notNull( versionNumber, "No version number could be determined for jar file: ${artfct.file}" );
 	            
 	            artifact(type:"bundle", name:"$symbolicName", version:"$versionNumber") {}
 	    }
