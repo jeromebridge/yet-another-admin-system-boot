@@ -244,6 +244,7 @@ dependencies {
 	    def groups = [
 	        "yaas-web": "com.yaas.web", 
 	        "yaas-ws": "com.yaas.web",
+	        "yaas-ws-rate": "com.yaas.web",
 	        "yaas-ws-client": "com.yaas.web",
 	        "spring-aspects-osgi": "com.pennassurancesoftware.org.springframework",
 	    ].withDefault {key -> "com.yaas.module"}
