@@ -901,7 +901,9 @@ def generatePlan( planName, artifacts, configurations ) {
             conf ->
                 artifact(type:"configuration", name:"$conf", version:"0") {}
         }
-        sorted.each {
+        sorted.findAll {
+            !isBundleFragment( getBundleManifest( it.file ) );
+        }.each {
 	        artfct -> 
 	            def bundleManifest = getBundleManifest( artfct.file );
                 Validate.notNull( bundleManifest, "No manifest could be found for jar file: ${artfct.file}" );
@@ -909,11 +911,14 @@ def generatePlan( planName, artifacts, configurations ) {
                 def versionNumber = bundleManifest.bundleVersion.toString();
                 Validate.notNull( symbolicName, "No symbolic name could be determined for jar file: ${artfct.file}" );
                 Validate.notNull( versionNumber, "No version number could be determined for jar file: ${artfct.file}" );
-	            
-	            artifact(type:"bundle", name:"$symbolicName", version:"$versionNumber") {}
+                artifact(type:"bundle", name:"$symbolicName", version:"$versionNumber") {}
 	    }
 	}
     return writer.toString();
+}
+
+def isBundleFragment( bundleManifest ) {
+    bundleManifest.fragmentHost && bundleManifest.fragmentHost.bundleSymbolicName && !bundleManifest.fragmentHost.bundleSymbolicName.allWhitespace
 }
 
 def sortBundleArtifacts( artifacts ) {
