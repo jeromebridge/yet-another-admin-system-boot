@@ -742,6 +742,10 @@ task updateVirgoSettings { shouldRunAfter downloadVirgo } << {
         source = "${projectDir}/src/main/config/java6-server.profile"
         target = "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/configuration/java6-server.profile"
     }
+    copy {
+        from "${projectDir}/src/main/config/serviceability.xml"
+        into "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/configuration"
+    }
 }
 
 task removeVirgoSplash { shouldRunAfter downloadVirgo } << {
