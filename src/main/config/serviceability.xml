@@ -50,6 +50,9 @@
 
 	<appender name="TRACE_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>serviceability/logs/trace.log</file>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
 			<FileNamePattern>serviceability/logs/trace_%i.log</FileNamePattern>
 			<MinIndex>1</MinIndex>
