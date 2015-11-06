@@ -39,7 +39,7 @@ If you want to run Yaas as a developer with Eclipse use the following steps:
 2. Import all of the projects from the jeromebridge/yet-another-admin-system repository
 3. Run the Virgo container without Yaas from this directory
 
-<code>gradle setupVirgoNoYaas runVirgo</code>
+<code>./gradlew setupVirgoNoYaas runVirgo</code>
 
 5. SSH to the running Virgo Server
 
