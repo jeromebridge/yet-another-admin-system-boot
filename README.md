@@ -23,7 +23,7 @@ sudo docker run -d --name=db -p 5432:5432 -e USER="super" -e DB="yaas" -e PASS="
 
 * To download, install, and run Yaas
 
-<code>gradle setupVirgo runVirgo</code>
+<code>./gradlew setupVirgo runVirgo</code>
 
 * Navigate to the Yaas Home Page with this link: <a href="http://localhost:8080/yweb">http://localhost:8080/yweb</a>
 
