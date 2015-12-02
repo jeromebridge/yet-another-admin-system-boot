@@ -180,7 +180,7 @@ dependencies {
     compile "org.amdatu:org.apache.felix.configadmin:1.8.0"
     
     compile "org.amdatu:org.amdatu.web.resourcehandler:1.0.8"
-    compile "com.pennassurancesoftware:com.pennassurancesoftware.web.resource.metronic:4.0.2"
+    // compile "com.pennassurancesoftware:com.pennassurancesoftware.web.resource.metronic:4.0.2"
 
    
     // Amdatu
@@ -714,7 +714,7 @@ task installYaas2(dependsOn: [ 'downloadVirgo', 'removeVirgoSplash' ]) << {
     // printConfig( getYaasConfig(), "Yaas Config" )
     
     // Root Context
-    // setRootContext( "/yweb" );
+    setRootContext( "/yweb" );
 }
 
 task installYaasDep(dependsOn: [ 'downloadVirgo' ]) << {
