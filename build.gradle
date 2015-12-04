@@ -116,12 +116,6 @@ repositories {
 			artifact "[artifact]/[artifact]-[revision].[ext]"
 		}
     }
-    ivy {
-        url 'http://repo3.pennassurancesoftware.com/content/repositories/osgi-releases/'
-		layout 'pattern', {
-			artifact "[artifact]/[artifact]-[revision].[ext]"
-		}
-    }
     // mavenLocal()
 }
 
