@@ -442,7 +442,7 @@ task setupVirgo( dependsOn: [ 'setupVirgoBase', 'installYaas2' ] ) {}
 
 task runVirgo(type:Exec) {
     def executableName = Os.isFamily( Os.FAMILY_WINDOWS ) ? "startup.bat" : "startup.sh"
-    commandLine "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/bin/" + executableName, "-debug", "-clean", "-Djava.protocol.handler.pkgs=org.ops4j.pax.url"
+    commandLine "${buildDir}/staging/virgo/${virgoArtifactId}-${virgoVersion}/bin/" + executableName, "-debug", "-clean", "-Djava.protocol.handler.pkgs=org.ops4j.pax.url", "-Dcom.sun.management.jmxremote", "-Dcom.sun.management.jmxremote.ssl=false", "-Dcom.sun.management.jmxremote.authenticate=false", "-Dcom.sun.management.jmxremote.port=1098"
 }
 
 task downloadVirgo << {

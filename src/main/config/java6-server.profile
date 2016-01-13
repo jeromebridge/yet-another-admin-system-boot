@@ -7,3 +7,4 @@ org.osgi.framework.executionenvironment = \
  J2SE-1.5,\
  JavaSE-1.6,\
  JavaSE-1.7
+org.osgi.framework.bootdelegation = org.eclipse.virgo.nano.authentication,com.sun.*,javax.xml.*,org.apache.xerces.jaxp.*,org.w3c.*,org.xml.*,sun.*,org.netbeans.lib.profiler.*
