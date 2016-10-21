@@ -250,7 +250,7 @@ dependencies {
 	    def versions = [
 	        "spring-aspects-osgi": "3.2.11.RELEASE-SNAPSHOT",
 	    ].withDefault {key -> dep.moduleVersion}
-	    def exclude = ["yaas-doclet", "yaas-parent", "yaas-ws-client", "yaas-dto-generator", "yaas-dto-maven-plugin", "maven-plugins", ]
+	    def exclude = ["yaas-doclet", "yaas-parent", "yaas-ws-client", "yaas-dto-generator", "yaas-dto-maven-plugin", "yaas-boot", "maven-plugins", ]
 	    
 	    def pom = new XmlSlurper().parse( artifact.file )
 	    pom.modules.module.each { e ->
